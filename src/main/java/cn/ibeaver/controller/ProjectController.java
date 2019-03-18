@@ -9,7 +9,6 @@ import cn.ibeaver.pojo.Module;
 import cn.ibeaver.pojo.Project;
 import cn.ibeaver.service.IModuleService;
 import cn.ibeaver.service.IProjectService;
-import org.omg.CORBA.INTERNAL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,7 +42,7 @@ public class ProjectController {
 		List<Project> projectList = projectService.getProjects();
 
 		if (projectList.size() == 0) {
-			return ResultDto.fail(ResultContants.DATA_BLANK, ResultContants.DATA_BLANK_MSG);
+			return ResultDto.fail(ResultContants.DATA_BLANK.getCode(), ResultContants.DATA_BLANK.getMsg());
 		} else {
 			return ResultDto.success(projectList);
 		}
@@ -54,7 +53,7 @@ public class ProjectController {
 	public ResultDto getProjectById(@PathVariable("id") Integer id) {
 		Project project = projectService.getProjectById(id);
 		if (project == null) {
-			return ResultDto.fail(ResultContants.DATA_BLANK, ResultContants.DATA_BLANK_MSG);
+			return ResultDto.fail(ResultContants.DATA_BLANK.getCode(), ResultContants.DATA_BLANK.getMsg());
 		} else {
 			Map map = new HashMap(); //存放项目下的模块相关数据
 			List<Module> moduleList = moduleService.getModulesByProjectId(id);
@@ -89,7 +88,7 @@ public class ProjectController {
 		if (i == 1) {
 			return ResultDto.success();
 		} else {
-			return ResultDto.fail(ResultContants.SYS_ERR, ResultContants.SYS_ERR_MSG);
+			return ResultDto.fail(ResultContants.SYS_ERR.getCode(), ResultContants.SYS_ERR.getMsg());
 		}
 	}
 

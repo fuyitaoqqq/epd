@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.ibeaver.dao.ApiMapper">
+
+    <sql id="apiAllColumns">
+        id, uri, description, method, request_header, request_success, request_fail, return_success_json, return_fail_json, project_id, create_time, update_time, module_id
+    </sql>
+    <sql id="apiAllColumnsExceptId">
+        uri, description, method, request_header, request_success, request_fail, return_success_json, return_fail_json, project_id, create_time, update_time, module_id
+    </sql>
+
+    <insert id="addApi" parameterType="api">
+        INSERT INTO epd.api
+        (<include refid="apiAllColumnsExceptId"/>)
+        VALUES
+        (uri=#{uri},description=#{description},method=#{method},request_header=#{requestHeader},
+        request_success="requestSuccess",request_fail=#{requestFail},return_success_json=#{returnSuccessJson},
+        return_fail_json=#{returnFailJson},project_id=#{projectId},module_id=#{moduleId},create_time=#{createTime})
+    </insert>
+
+    <delete id="deleteApi">
+        DELETE FROM epd.api
+        WHERE id = #{id}
+              AND module_id = #{moduleId}
+              AND project_id = #{projectId}
+    </delete>
+
+    <update id="updateApi" parameterType="api">
+        UPDATE epd.api
+        <trim suffixOverrides=",">
+            <set>
+                <if test="uri != null and uri.length > 0">
+                    uri=#{uri}
+                </if>
+                <if test="description != null and description.length > 0">
+                    description=#{description}
+                </if>
+                <if test="method != null and method.length > 0">
+                    method=#{method}
+                </if>
+                <if test="requestHeader != null and requestHeader.length > 0">
+                    request_header=#{requestHeader}
+                </if>
+                <if test="requestSuccess != null and requestSuccess.length > 0">
+                    request_success=#{requestSuccess}
+                </if>
+                <if test="requestFail != null and requestFail.length > 0">
+                    request_fail=#{requestFail}
+                </if>
+                <if test="returnSuccessJson != null and returnSuccessJson.length > 0">
+                    return_success_json=#{returnSuccessJson}
+                </if>
+                <if test="returnFailJson != null and returnFailJson.length > 0">
+                    return_fail_json=#{returnFailJson}
+                </if>
+                <if test="projectId != null and projectId.length > 0">
+                    project_id=#{projectId}
+                </if>
+                <if test="moduleId != null and moduleId.length > 0">
+                    module_id=#{moduleId}
+                </if>
+                <if test="createTime != null">
+                    create_time=#{createTime}
+                </if>
+                <if test="updateTime != null">
+                    update_time=#{updateTime}
+                </if>
+            </set>
+        </trim>
+    </update>
+
+    <select id="getApiById" resultType="api">
+        SELECT
+        <include refid="apiAllColumns"/>
+        FROM epd.api
+        WHERE id=#{id} AND module_id=#{moduleId} AND project_id=#{projectId}
+    </select>
+
+</mapper>

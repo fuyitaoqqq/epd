@@ -26,11 +26,11 @@ public class ResultDto {
 	}
 
 	public static ResultDto success(Object data) {
-		return new ResultDto(ResultContants.SUCCESS, ResultContants.SUCCESS_MSG, data);
+		return new ResultDto(ResultContants.SUCCESS.getCode(), ResultContants.SUCCESS.getMsg(), data);
 	}
 
 	public static ResultDto success() {
-		return new ResultDto(ResultContants.SUCCESS, ResultContants.SUCCESS_MSG, null);
+		return new ResultDto(ResultContants.SUCCESS.getCode(), ResultContants.SUCCESS.getMsg(), null);
 	}
 
 	public static ResultDto fail(Integer code, String msg) {

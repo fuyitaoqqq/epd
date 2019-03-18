@@ -44,7 +44,7 @@ public class ModuleController {
 				return ResultDto.success();
 			}
 		}
-		return ResultDto.fail(ResultContants.PARAM_ERR, ResultContants.PARAM_ERR_MSG);
+		return ResultDto.fail(ResultContants.PARAM_ERR.getCode(), ResultContants.PARAM_ERR.getMsg());
 	}
 
 	@RequestMapping(value = "/module/{moduleId}", method = RequestMethod.DELETE,
@@ -59,7 +59,7 @@ public class ModuleController {
 				return ResultDto.success();
 			}
 		}
-		return ResultDto.fail(ResultContants.PARAM_ERR, ResultContants.PARAM_ERR_MSG);
+		return ResultDto.fail(ResultContants.PARAM_ERR.getCode(), ResultContants.PARAM_ERR.getMsg());
 
 	}
 
@@ -74,7 +74,7 @@ public class ModuleController {
 				return ResultDto.success(module);
 			}
 		}
-		return ResultDto.fail(ResultContants.PARAM_ERR, ResultContants.PARAM_ERR_MSG);
+		return ResultDto.fail(ResultContants.PARAM_ERR.getCode(), ResultContants.PARAM_ERR.getMsg());
 
 	}
 
@@ -91,7 +91,7 @@ public class ModuleController {
 				return ResultDto.success();
 			}
 		}
-		return ResultDto.fail(ResultContants.PARAM_ERR, ResultContants.PARAM_ERR_MSG);
+		return ResultDto.fail(ResultContants.PARAM_ERR.getCode(), ResultContants.PARAM_ERR.getMsg());
 	}
 
 	private Boolean ifProjectExist(Integer projectId) {

@@ -10,17 +10,36 @@ package cn.ibeaver.dto;
  * @Date 2019-3-18 00:31
  * @Version 1.0
  **/
-public class ResultContants {
+public enum ResultContants {
 
-	public static final Integer SUCCESS = 0;
-	public static final String SUCCESS_MSG = "SUCCESS!";
+	SUCCESS(0, "SUCCESS!"),
+	PARAM_ERR(-1, "参数错误！"),
+	DATA_BLANK(-2,"没有数据！"),
+	SYS_ERR(-3,"系统错误！");
 
-	public static final Integer PARAM_ERR = -1;
-	public static final String PARAM_ERR_MSG = "参数错误！";
+	private Integer code;
+	private String msg;
 
-	public static final Integer DATA_BLANK = -2;
-	public static final String DATA_BLANK_MSG = "没有数据！";
+	private ResultContants(){
 
-	public static final Integer SYS_ERR = -3;
-	public static final String SYS_ERR_MSG = "系统错误";
+	}
+
+	private ResultContants(Integer code, String msg) {
+		this.code = code;
+		this.msg = msg;
+	}
+
+	public Integer getCode(){
+		return code;
+	}
+	public String getMsg() {
+		return msg;
+	}
+	public void setCode(Integer code) {
+		this.code = code;
+	}
+	public void setMsg(String msg) {
+		this.msg = msg;
+	}
+
 }
