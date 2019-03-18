@@ -51,12 +51,15 @@ DROP TABLE IF EXISTS `module`;
 CREATE TABLE `module` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL COMMENT '模块名称',
+  `uri` varchar(255) DEFAULT NULL COMMENT '模块uri',
+  `description` varchar(255) DEFAULT NULL COMMENT '模块描述',
   `api_list` blob COMMENT '模块下的uri接口列表',
   `project_id` int(11) NOT NULL COMMENT '所属项目ID',
-  `create_time` datetime NOT NULL,
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `module_id_uindex` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='项目模块';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='项目模块';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -89,4 +92,4 @@ CREATE TABLE `project` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-03-18  9:51:43
+-- Dump completed on 2019-03-18 15:06:28
