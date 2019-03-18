@@ -43,9 +43,6 @@
             <if test="description != null and description.length() > 0">
                 description = #{description},
             </if>
-            <if test="createTime != null and createTime.length() > 0">
-                create_time = #{createTime},
-            </if>
             <if test="updateTime != null">
                 update_time = #{updateTime},
             </if>
@@ -60,6 +57,7 @@
             </if>
             </set>
         </trim>
+        WHERE id=#{id}
     </update>
 
     <select id="getProjectById" parameterType="int" resultType="project">

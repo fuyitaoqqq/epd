@@ -24,13 +24,22 @@ public class Module {
 	/* 模块名 */
 	private String name;
 
+	/* 模块uri */
+	private String uri;
+
+	/* 模块描述 */
+	private String description;
+
 	/* 接口列表 */
-	private List apiList;
+	private String apiList;
 
 	/* 关联项目ID */
 	private Integer projectId;
 
 	/* 创建时间 */
 	private Date createTime;
+
+	/* 修改时间 */
+	private Date updateTime;
 
 }

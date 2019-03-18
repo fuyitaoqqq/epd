@@ -5,7 +5,9 @@ package cn.ibeaver.controller;
 
 import cn.ibeaver.dto.ResultContants;
 import cn.ibeaver.dto.ResultDto;
+import cn.ibeaver.pojo.Module;
 import cn.ibeaver.pojo.Project;
+import cn.ibeaver.service.IModuleService;
 import cn.ibeaver.service.IProjectService;
 import org.omg.CORBA.INTERNAL;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,9 @@ public class ProjectController {
 	@Autowired
 	private IProjectService projectService;
 
+	@Autowired
+	private IModuleService moduleService;
+
 	@RequestMapping(value = "/project", method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResultDto getIndex() {
@@ -52,7 +57,10 @@ public class ProjectController {
 			return ResultDto.fail(ResultContants.DATA_BLANK, ResultContants.DATA_BLANK_MSG);
 		} else {
 			Map map = new HashMap(); //存放项目下的模块相关数据
-			return ResultDto.success(project);
+			List<Module> moduleList = moduleService.getModulesByProjectId(id);
+			map.put("project", project);
+			map.put("moduleList", moduleList);
+			return ResultDto.success(map);
 		}
 	}
 
