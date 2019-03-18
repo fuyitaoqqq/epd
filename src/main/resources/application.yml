@@ -1,0 +1,19 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: EPD
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/epd
+    username: root
+    password: 1qaz@WSX
+    driver-class-name: com.mysql.cj.jdbc.Driver
+mybatis:
+  type-aliases-package: cn.ibeaver.pojo
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+logging:
+  level:
+    cn:
+      ibeaver: debug

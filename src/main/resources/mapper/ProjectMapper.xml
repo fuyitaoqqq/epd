@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.ibeaver.dao.ProjectMapper">
+
+    <resultMap id="projectsList" type="project">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="description" property="description" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="request_header" property="requestHeader" />
+        <result column="request_success" property="requestSuccess" />
+        <result column="request_fail" property="requestFail" />
+    </resultMap>
+    
+    <sql id="projectAllColumns">
+        id, name, description, create_time, update_time, request_header, request_success, request_fail
+    </sql>
+    <sql id="projectColumnsExpectId">
+        name, description, create_time, update_time, request_header, request_success, request_fail
+    </sql>
+    
+    <insert id="addProject" parameterType="project">
+        INSERT INTO epd.project
+        (<include refid="projectColumnsExpectId" />)
+        VALUES
+        (#{name}, #{description}, #{createTime}, #{updateTime}, #{requestHeader}, #{requestSuccess}, #{requestFail})
+    </insert>
+
+    <delete id="deleteProjectById" parameterType="int">
+        DELETE FROM epd.project WHERE id = #{id}
+    </delete>
+
+    <update id="updateProject" parameterType="project">
+        UPDATE epd.project
+        <trim suffixOverrides=",">
+            <set>
+            <if test="name != null and name.length() > 0">
+                name = #{name},
+            </if>
+            <if test="description != null and description.length() > 0">
+                description = #{description},
+            </if>
+            <if test="createTime != null and createTime.length() > 0">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="requestHeader != null and requestHeader.length() > 0">
+                request_header = #{requestHeader},
+            </if>
+            <if test="requestSuccess != null and requestSuccess.length() > 0">
+                request_success = #{requestSuccess},
+            </if>
+            <if test="requestFail != null and requestFail.length() > 0">
+                request_fail = #{requestFail},
+            </if>
+            </set>
+        </trim>
+    </update>
+
+    <select id="getProjectById" parameterType="int" resultType="project">
+        SELECT
+        <include refid="projectAllColumns" />
+        FROM epd.project WHERE id = #{id}
+    </select>
+
+    <select id="getProjects" resultMap="projectsList">
+        SELECT
+        <include refid="projectAllColumns" />
+        FROM epd.project
+    </select>
+
+</mapper>
