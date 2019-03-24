@@ -9,6 +9,8 @@ import cn.ibeaver.pojo.Api;
 import cn.ibeaver.pojo.Module;
 import cn.ibeaver.service.IApiService;
 import cn.ibeaver.service.IModuleService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.awt.*;
 
@@ -29,7 +32,7 @@ import java.awt.*;
  **/
 @RestController
 @RequestMapping("/project/{projectId}/module/{moduleId}")
-@io.swagger.annotations.Api("API接口")
+@io.swagger.annotations.Api(tags = "接口管理")
 public class ApiController {
 
 	@Autowired
@@ -38,10 +41,24 @@ public class ApiController {
 	@Autowired
 	private IModuleService moduleService;
 
-	@ApiOperation(value = "添加接口", notes = "添加接口，接口详情")
+	@ApiOperation(value = "添加接口详情", notes = "添加接口，接口详情", httpMethod = "POST",
+		produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "uri", value = "api接口地址", required = true, dataType = "string", paramType = "query"),
+		@ApiImplicitParam(name = "description", value = "api描述", required = false, dataType = "string", paramType = "query"),
+		@ApiImplicitParam(name = "method", value = "api请求方式", required = true, dataType = "string", paramType = "query"),
+		@ApiImplicitParam(name = "requestHeader", value = "请求头", required = false, dataType = "string", paramType = "query"),
+		@ApiImplicitParam(name = "requestParam", value = "请求参数", required = false, dataType = "string", paramType = "query"),
+		@ApiImplicitParam(name = "requestSuccess", value = "成功返回参数", required = false, dataType = "string", paramType = "query"),
+		@ApiImplicitParam(name = "requestFail", value = "失败返回参数", required = false, dataType = "string", paramType = "query"),
+		@ApiImplicitParam(name = "returnSuccessJson", value = "成功返回json示例", required = false, dataType = "string", paramType = "query"),
+		@ApiImplicitParam(name = "returnFailJson", value = "失败返回json实例", required = false, dataType = "string", paramType = "query"),
+		@ApiImplicitParam(name = "moduleId", value = "module ID", required = true, dataType = "integer", paramType = "query"),
+		@ApiImplicitParam(name = "projectId", value = "project ID", required = true, dataType = "integer", paramType = "query")
+	})
 	@RequestMapping(value = "/api", method = RequestMethod.POST,
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResultDto addApi(Api api,
+	public ResultDto addApi(@ApiIgnore Api api,
 							@PathVariable("moduleId") Integer moduleId,
 							@PathVariable("projectId") Integer projectId) {
 		Boolean judgeParam = judgeParam(api, moduleId, projectId);
@@ -59,6 +76,8 @@ public class ApiController {
 
 	}
 
+	@ApiOperation(value = "删除api接口详情", notes = "删除api接口详情", httpMethod = "DELETE",
+			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@RequestMapping(value = "/api/{apiId}", method = RequestMethod.DELETE,
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResultDto deleteApi(@PathVariable("apiId") Integer apiId,
@@ -73,9 +92,24 @@ public class ApiController {
 		return ResultDto.fail(ResultContants.PARAM_ERR.getCode(), ResultContants.PARAM_ERR.getMsg());
 	}
 
+	@ApiOperation(value = "更新接口详情", notes = "更新接口详情", httpMethod = "PUT",
+			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "uri", value = "api接口地址", required = true, dataType = "string", paramType = "query"),
+			@ApiImplicitParam(name = "description", value = "api描述", required = false, dataType = "string", paramType = "query"),
+			@ApiImplicitParam(name = "method", value = "api请求方式", required = true, dataType = "string", paramType = "query"),
+			@ApiImplicitParam(name = "requestHeader", value = "请求头", required = false, dataType = "string", paramType = "query"),
+			@ApiImplicitParam(name = "requestParam", value = "请求参数", required = false, dataType = "string", paramType = "query"),
+			@ApiImplicitParam(name = "requestSuccess", value = "成功返回参数", required = false, dataType = "string", paramType = "query"),
+			@ApiImplicitParam(name = "requestFail", value = "失败返回参数", required = false, dataType = "string", paramType = "query"),
+			@ApiImplicitParam(name = "returnSuccessJson", value = "成功返回json示例", required = false, dataType = "string", paramType = "query"),
+			@ApiImplicitParam(name = "returnFailJson", value = "失败返回json实例", required = false, dataType = "string", paramType = "query"),
+			@ApiImplicitParam(name = "moduleId", value = "module ID", required = true, dataType = "integer", paramType = "query"),
+			@ApiImplicitParam(name = "projectId", value = "project ID", required = true, dataType = "integer", paramType = "query")
+	})
 	@RequestMapping(value = "/api/{apiId}", method = RequestMethod.PUT,
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResultDto updateApi(Api api,
+	public ResultDto updateApi(@ApiIgnore Api api,
 							   @PathVariable("apiId") Integer apiId,
 							   @PathVariable("moduleId") Integer moduleId,
 							   @PathVariable("projectId") Integer projectId) {
@@ -90,7 +124,8 @@ public class ApiController {
 		}
 		return ResultDto.fail(ResultContants.PARAM_ERR.getCode(), ResultContants.PARAM_ERR.getMsg());
 	}
-
+	@ApiOperation(value = "查询接口详情", notes = "查询接口详情", httpMethod = "GET",
+			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@RequestMapping(value = "/api/{apiId}", method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResultDto getApi(@PathVariable("apiId") Integer apiId,

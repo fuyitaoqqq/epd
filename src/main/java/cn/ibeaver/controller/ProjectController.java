@@ -9,12 +9,17 @@ import cn.ibeaver.pojo.Module;
 import cn.ibeaver.pojo.Project;
 import cn.ibeaver.service.IModuleService;
 import cn.ibeaver.service.IProjectService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +33,7 @@ import java.util.Map;
  * @Version 1.0
  **/
 @RestController
+@Api(tags = "项目管理")
 public class ProjectController {
 
 	@Autowired
@@ -36,6 +42,7 @@ public class ProjectController {
 	@Autowired
 	private IModuleService moduleService;
 
+	@ApiOperation(value = "获取项目列表", httpMethod = "GET")
 	@RequestMapping(value = "/project", method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResultDto getIndex() {
@@ -48,6 +55,8 @@ public class ProjectController {
 		}
 	}
 
+	@ApiOperation(value = "获取项目详情", notes = "返回该项目所属的模块详情", httpMethod = "GET",
+			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@RequestMapping(value = "/project/{id}", method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResultDto getProjectById(@PathVariable("id") Integer id) {
@@ -63,13 +72,24 @@ public class ProjectController {
 		}
 	}
 
+	@ApiOperation(value = "创建项目", httpMethod = "POST",
+			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "name", value = "项目名称", required = true, dataType = "string", paramType = "query"),
+			@ApiImplicitParam(name = "description", value = "项目描述", required = false, dataType = "string", paramType = "query"),
+			@ApiImplicitParam(name = "requestHeader", value = "全局参数：响应头", required = false, dataType = "string", paramType = "query"),
+			@ApiImplicitParam(name = "requestParam", value = "全局参数：请求参数", required = false, dataType = "string", paramType = "query"),
+			@ApiImplicitParam(name = "requestSuccess", value = "全局参数：成功返回参数", required = false, dataType = "string", paramType = "query"),
+			@ApiImplicitParam(name = "requestFail", value = "全局参数：失败返回参数", required = false, dataType = "string", paramType = "query")
+	})
 	@RequestMapping(value = "/project", method = RequestMethod.POST,
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResultDto addProject(Project project) {
+	public ResultDto addProject(@ApiIgnore Project project) {
 		int i = projectService.addProject(project);
 		return ifSuccess(i);
 	}
 
+	@ApiOperation(value = "删除项目", httpMethod = "DELETE", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@RequestMapping(value = "/project/{id}", method = RequestMethod.DELETE,
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResultDto deleteProject(@PathVariable("id") Integer id) {
@@ -77,6 +97,15 @@ public class ProjectController {
 		return ifSuccess(i);
 	}
 
+	@ApiOperation(value = "更新项目信息", httpMethod = "PUT", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "name", value = "项目名称", required = true, dataType = "string", paramType = "query"),
+			@ApiImplicitParam(name = "description", value = "项目描述", required = false, dataType = "string", paramType = "query"),
+			@ApiImplicitParam(name = "requestHeader", value = "全局参数：响应头", required = false, dataType = "string", paramType = "query"),
+			@ApiImplicitParam(name = "requestParam", value = "全局参数：请求参数", required = false, dataType = "string", paramType = "query"),
+			@ApiImplicitParam(name = "requestSuccess", value = "全局参数：成功返回参数", required = false, dataType = "string", paramType = "query"),
+			@ApiImplicitParam(name = "requestFail", value = "全局参数：失败返回参数", required = false, dataType = "string", paramType = "query")
+	})
 	@RequestMapping(value = "/project/{id}", method = RequestMethod.PUT,
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResultDto updateProject(Project project) {

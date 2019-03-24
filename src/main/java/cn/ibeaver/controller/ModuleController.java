@@ -9,6 +9,10 @@ import cn.ibeaver.pojo.Module;
 import cn.ibeaver.pojo.Project;
 import cn.ibeaver.service.IModuleService;
 import cn.ibeaver.service.IProjectService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * @ClassName ModuleController
@@ -26,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
  **/
 @RestController
 @RequestMapping("/project/{projectId}")
+@Api(tags = "模块管理")
 public class ModuleController {
 
 	@Autowired
@@ -34,9 +40,18 @@ public class ModuleController {
 	@Autowired
 	private IProjectService projectService;
 
+	@ApiOperation(value = "添加模块", notes = "添加模块", httpMethod = "POST",
+			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "name", value = "模块名称", required = true, dataType = "string", paramType = "query"),
+			@ApiImplicitParam(name = "uri", value = "模块统一uri接口前缀，可为null", required = false, dataType = "string", paramType = "query"),
+			@ApiImplicitParam(name = "description", value = "模块描述", required = false, dataType = "string", paramType = "query"),
+			@ApiImplicitParam(name = "apiList", value = "模块下属api，格式为[/api,/api]", required = false, dataType = "string", paramType = "query"),
+			@ApiImplicitParam(name = "projectId", value = "模块统一uri接口前缀，可为null", required = true, dataType = "number", paramType = "query")
+	})
 	@RequestMapping(value = "/module", method = RequestMethod.POST,
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResultDto addModule(Module module, @PathVariable("projectId") Integer projectId) {
+	public ResultDto addModule(@ApiIgnore Module module, @PathVariable("projectId") Integer projectId) {
 		Boolean exist = ifProjectExist(projectId);
 		if (exist && module.getProjectId().equals(projectId)) {
 			int i = moduleService.addModule(module);
@@ -47,6 +62,8 @@ public class ModuleController {
 		return ResultDto.fail(ResultContants.PARAM_ERR.getCode(), ResultContants.PARAM_ERR.getMsg());
 	}
 
+	@ApiOperation(value = "删除模块", httpMethod = "DELETE",
+			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@RequestMapping(value = "/module/{moduleId}", method = RequestMethod.DELETE,
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResultDto deleteModule(@PathVariable("projectId") Integer projectId,
@@ -63,6 +80,7 @@ public class ModuleController {
 
 	}
 
+	@ApiOperation(value = "获取模块", httpMethod = "GET", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@RequestMapping(value = "/module/{moduleId}", method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResultDto getModuleById(@PathVariable("projectId") Integer projectId,
@@ -78,9 +96,18 @@ public class ModuleController {
 
 	}
 
+	@ApiOperation(value = "更新模块", notes = "更新模块", httpMethod = "PUT",
+			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "name", value = "模块名称", required = true, dataType = "string", paramType = "query"),
+			@ApiImplicitParam(name = "uri", value = "模块统一uri接口前缀，可为null", required = false, dataType = "string", paramType = "query"),
+			@ApiImplicitParam(name = "description", value = "模块描述", required = false, dataType = "string", paramType = "query"),
+			@ApiImplicitParam(name = "apiList", value = "模块下属api，格式为[/api,/api]", required = false, dataType = "string", paramType = "query"),
+			@ApiImplicitParam(name = "projectId", value = "模块统一uri接口前缀，可为null", required = true, dataType = "number", paramType = "query")
+	})
 	@RequestMapping(value = "/module/{moduleId}", method = RequestMethod.PUT,
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResultDto updateModule(Module module,
+	public ResultDto updateModule(@ApiIgnore Module module,
 								  @PathVariable("projectId") Integer projectId,
 								  @PathVariable("moduleId") Integer moduleId) {
 		Boolean exist = ifProjectExist(projectId);

@@ -5,19 +5,19 @@
 <mapper namespace="cn.ibeaver.dao.ApiMapper">
 
     <sql id="apiAllColumns">
-        id, uri, description, method, request_header, request_success, request_fail, return_success_json, return_fail_json, project_id, create_time, update_time, module_id
+        id, uri, description, method, request_header, request_param, request_success, request_fail, return_success_json, return_fail_json, project_id, create_time, update_time, module_id
     </sql>
     <sql id="apiAllColumnsExceptId">
-        uri, description, method, request_header, request_success, request_fail, return_success_json, return_fail_json, project_id, module_id, create_time, update_time
+        uri, description, method, request_header, request_param, request_success, request_fail, return_success_json, return_fail_json, project_id, module_id, create_time, update_time
     </sql>
 
     <insert id="addApi" parameterType="api">
         INSERT INTO epd.api
         (<include refid="apiAllColumnsExceptId"/>)
         VALUES
-        (uri=#{uri},description=#{description},method=#{method},request_header=#{requestHeader},
-        request_success=#{requestSuccess},request_fail=#{requestFail},return_success_json=#{returnSuccessJson},
-        return_fail_json=#{returnFailJson},project_id=#{projectId},module_id=#{moduleId},create_time=#{createTime},update_time=#{updateTime})
+        (#{uri},#{description},#{method},#{requestHeader},#{requestParam},
+        #{requestSuccess},#{requestFail},#{returnSuccessJson},
+        #{returnFailJson},#{projectId},#{moduleId},#{createTime},#{updateTime})
     </insert>
 
     <delete id="deleteApi">
@@ -42,6 +42,9 @@
                 </if>
                 <if test="requestHeader != null and requestHeader.length > 0">
                     request_header=#{requestHeader},
+                </if>
+                <if test="requestParam != null and requestParam.length > 0">
+                    request_param=#{requestParam},
                 </if>
                 <if test="requestSuccess != null and requestSuccess.length > 0">
                     request_success=#{requestSuccess},

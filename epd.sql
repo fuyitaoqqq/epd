@@ -28,17 +28,18 @@ CREATE TABLE `api` (
   `description` varchar(255) DEFAULT NULL COMMENT '接口描述',
   `method` varchar(100) NOT NULL COMMENT '接口请求方式',
   `request_header` blob COMMENT '请求头',
+  `request_param` blob COMMENT '请求参数',
   `request_success` blob COMMENT '成功返回',
   `request_fail` blob COMMENT '失败返回',
   `return_success_json` blob COMMENT '成功返回json',
   `return_fail_json` blob COMMENT '失败返回json',
   `project_id` int(11) NOT NULL,
+  `module_id` int(11) NOT NULL,
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '修改时间',
-  `module_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `api_id_uindex` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='接口详情';
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8 COMMENT='接口详情';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -59,7 +60,7 @@ CREATE TABLE `module` (
   `update_time` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `module_id_uindex` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='项目模块';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='项目模块';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -76,11 +77,12 @@ CREATE TABLE `project` (
   `create_time` datetime NOT NULL COMMENT '项目创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '项目信息更新时间',
   `request_header` blob COMMENT '项目全局参数：请求头',
+  `request_param` blob COMMENT '项目全局参数：请求参数',
   `request_success` blob COMMENT '项目全局参数：成功返回参数',
   `request_fail` blob COMMENT '项目全局参数：失败返回参数',
   PRIMARY KEY (`id`),
   UNIQUE KEY `project_id_uindex` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='项目实体类';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='项目实体类';
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -92,4 +94,4 @@ CREATE TABLE `project` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-03-18 15:06:28
+-- Dump completed on 2019-03-24 12:32:38

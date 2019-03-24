@@ -35,6 +35,9 @@ public class Project {
 	/* 项目全局参数，请求头 */
 	private String requestHeader;
 
+	/* 项目全局参数，请求参数 */
+	private String requestParam;
+
 	/* 项目全局参数，成功返回参数 */
 	private String requestSuccess;
 

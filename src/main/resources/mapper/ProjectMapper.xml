@@ -11,22 +11,23 @@
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
         <result column="request_header" property="requestHeader" />
+        <result column="request_param" property="requestParam" />
         <result column="request_success" property="requestSuccess" />
         <result column="request_fail" property="requestFail" />
     </resultMap>
     
     <sql id="projectAllColumns">
-        id, name, description, create_time, update_time, request_header, request_success, request_fail
+        id, name, description, create_time, update_time, request_header, request_param, request_success, request_fail
     </sql>
     <sql id="projectColumnsExpectId">
-        name, description, create_time, update_time, request_header, request_success, request_fail
+        name, description, create_time, update_time, request_header, request_param, request_success, request_fail
     </sql>
     
     <insert id="addProject" parameterType="project">
         INSERT INTO epd.project
         (<include refid="projectColumnsExpectId" />)
         VALUES
-        (#{name}, #{description}, #{createTime}, #{updateTime}, #{requestHeader}, #{requestSuccess}, #{requestFail})
+        (#{name}, #{description}, #{createTime}, #{updateTime}, #{requestHeader}, #{requestParam}, #{requestSuccess}, #{requestFail})
     </insert>
 
     <delete id="deleteProjectById" parameterType="int">
@@ -48,6 +49,9 @@
             </if>
             <if test="requestHeader != null and requestHeader.length() > 0">
                 request_header = #{requestHeader},
+            </if>
+            <if test="requestParam != null and requestParam.length() > 0">
+                request_param = #{requestParam},
             </if>
             <if test="requestSuccess != null and requestSuccess.length() > 0">
                 request_success = #{requestSuccess},
