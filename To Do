@@ -1,0 +1,23 @@
+project:
+    name
+    base_url
+    description
+    private
+    id
+    create_time
+    update_time
+    owner
+    return_format
+
+user:
+    id
+    uuid
+    name
+    password
+    phone
+    email
+    project_list
+    token
+    ...
+
+module:
