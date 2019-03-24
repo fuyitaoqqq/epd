@@ -4,7 +4,7 @@ spring:
   application:
     name: EPD
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/epd
+    url: jdbc:mysql://127.0.0.1:3306/epd?useUnicode=true&characterEncoding=utf8
     username: root
     password: 1qaz@WSX
     driver-class-name: com.mysql.cj.jdbc.Driver

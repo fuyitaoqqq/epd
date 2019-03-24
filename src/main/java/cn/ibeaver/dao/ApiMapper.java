@@ -4,6 +4,7 @@
 package cn.ibeaver.dao;
 
 import cn.ibeaver.pojo.Api;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Component;
  * @Version 1.0
  **/
 @Component
-public interface ApiMapper {
+public interface ApiMapper{
 
 	int addApi(Api api);
 

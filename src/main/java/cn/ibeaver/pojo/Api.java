@@ -44,11 +44,11 @@ public class Api {
 	/* 返回失败json */
 	private String returnFailJson;
 
-	/* 所属模块ID */
-	private Integer moduleId;
-
 	/* 所属项目ID */
 	private Integer projectId;
+
+	/* 所属模块ID */
+	private Integer moduleId;
 
 	/* 创建时间 */
 	private Date createTime;

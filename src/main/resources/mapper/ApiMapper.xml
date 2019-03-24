@@ -8,7 +8,7 @@
         id, uri, description, method, request_header, request_success, request_fail, return_success_json, return_fail_json, project_id, create_time, update_time, module_id
     </sql>
     <sql id="apiAllColumnsExceptId">
-        uri, description, method, request_header, request_success, request_fail, return_success_json, return_fail_json, project_id, create_time, update_time, module_id
+        uri, description, method, request_header, request_success, request_fail, return_success_json, return_fail_json, project_id, module_id, create_time, update_time
     </sql>
 
     <insert id="addApi" parameterType="api">
@@ -16,8 +16,8 @@
         (<include refid="apiAllColumnsExceptId"/>)
         VALUES
         (uri=#{uri},description=#{description},method=#{method},request_header=#{requestHeader},
-        request_success="requestSuccess",request_fail=#{requestFail},return_success_json=#{returnSuccessJson},
-        return_fail_json=#{returnFailJson},project_id=#{projectId},module_id=#{moduleId},create_time=#{createTime})
+        request_success=#{requestSuccess},request_fail=#{requestFail},return_success_json=#{returnSuccessJson},
+        return_fail_json=#{returnFailJson},project_id=#{projectId},module_id=#{moduleId},create_time=#{createTime},update_time=#{updateTime})
     </insert>
 
     <delete id="deleteApi">
@@ -32,42 +32,34 @@
         <trim suffixOverrides=",">
             <set>
                 <if test="uri != null and uri.length > 0">
-                    uri=#{uri}
+                    uri=#{uri},
                 </if>
                 <if test="description != null and description.length > 0">
-                    description=#{description}
+                    description=#{description},
                 </if>
                 <if test="method != null and method.length > 0">
-                    method=#{method}
+                    method=#{method},
                 </if>
                 <if test="requestHeader != null and requestHeader.length > 0">
-                    request_header=#{requestHeader}
+                    request_header=#{requestHeader},
                 </if>
                 <if test="requestSuccess != null and requestSuccess.length > 0">
-                    request_success=#{requestSuccess}
+                    request_success=#{requestSuccess},
                 </if>
                 <if test="requestFail != null and requestFail.length > 0">
-                    request_fail=#{requestFail}
+                    request_fail=#{requestFail},
                 </if>
                 <if test="returnSuccessJson != null and returnSuccessJson.length > 0">
-                    return_success_json=#{returnSuccessJson}
+                    return_success_json=#{returnSuccessJson},
                 </if>
                 <if test="returnFailJson != null and returnFailJson.length > 0">
-                    return_fail_json=#{returnFailJson}
-                </if>
-                <if test="projectId != null and projectId.length > 0">
-                    project_id=#{projectId}
-                </if>
-                <if test="moduleId != null and moduleId.length > 0">
-                    module_id=#{moduleId}
-                </if>
-                <if test="createTime != null">
-                    create_time=#{createTime}
+                    return_fail_json=#{returnFailJson},
                 </if>
                 <if test="updateTime != null">
-                    update_time=#{updateTime}
+                    update_time=#{updateTime},
                 </if>
             </set>
+            where id=#{id}
         </trim>
     </update>
 

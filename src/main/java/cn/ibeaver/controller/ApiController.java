@@ -9,6 +9,7 @@ import cn.ibeaver.pojo.Api;
 import cn.ibeaver.pojo.Module;
 import cn.ibeaver.service.IApiService;
 import cn.ibeaver.service.IModuleService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,6 +29,7 @@ import java.awt.*;
  **/
 @RestController
 @RequestMapping("/project/{projectId}/module/{moduleId}")
+@io.swagger.annotations.Api("API接口")
 public class ApiController {
 
 	@Autowired
@@ -36,6 +38,7 @@ public class ApiController {
 	@Autowired
 	private IModuleService moduleService;
 
+	@ApiOperation(value = "添加接口", notes = "添加接口，接口详情")
 	@RequestMapping(value = "/api", method = RequestMethod.POST,
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResultDto addApi(Api api,
@@ -45,10 +48,10 @@ public class ApiController {
 		Boolean moduleExist = ifModuleExist(moduleId, projectId);
 		if (judgeParam && moduleExist) {
 			int i = apiService.addApi(api);
-			if (i == 1) {
+			if (i == ResultContants.SUCCESS.getCode()) {
 				return ResultDto.success();
 			} else {
-				return ResultDto.fail(ResultContants.PARAM_ERR.getCode(), ResultContants.PARAM_ERR.getMsg());
+				return ResultDto.fail(ResultContants.SYS_ERR.getCode(), ResultContants.SYS_ERR.getMsg());
 			}
 		} else {
 			return ResultDto.fail(ResultContants.PARAM_ERR.getCode(), ResultContants.PARAM_ERR.getMsg());
@@ -62,8 +65,10 @@ public class ApiController {
 							   @PathVariable("moduleId") Integer moduleId,
 							   @PathVariable("projectId") Integer projectId) {
 		int i = apiService.deleteApi(apiId, moduleId, projectId);
-		if (i == 1) {
+		if (i == ResultContants.SUCCESS.getCode()) {
 			return ResultDto.success();
+		} else if (i == ResultContants.SYS_ERR.getCode()) {
+			return ResultDto.fail(ResultContants.SYS_ERR.getCode(), ResultContants.SYS_ERR.getMsg());
 		}
 		return ResultDto.fail(ResultContants.PARAM_ERR.getCode(), ResultContants.PARAM_ERR.getMsg());
 	}
@@ -77,8 +82,9 @@ public class ApiController {
 		Boolean judgeParam = judgeParam(api, moduleId, projectId);
 		Api getOne = apiService.getApiById(apiId, moduleId, projectId);
 		if (judgeParam && getOne != null) {
+			api.setId(apiId);
 			int i = apiService.updateApi(api);
-			if (i == 1) {
+			if (i == ResultContants.SUCCESS.getCode()) {
 				return ResultDto.success();
 			}
 		}
@@ -107,12 +113,7 @@ public class ApiController {
 	}
 
 	private Boolean judgeParam(Api api, Integer moduleId, Integer projectId) {
-		if (api.getProjectId().equals(projectId)) {
-			if (api.getModuleId().equals(moduleId)) {
-				return true;
-			}
-		}
-		return false;
+		return (api.getProjectId().equals(projectId) && api.getModuleId().equals(moduleId));
 	}
 
 }
