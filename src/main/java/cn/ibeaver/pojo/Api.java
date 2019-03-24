@@ -5,6 +5,7 @@ package cn.ibeaver.pojo;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -15,8 +16,9 @@ import java.util.Date;
  * @Version 1.0
  **/
 @Data
-public class Api {
+public class Api implements Serializable {
 
+	private static final long serialVersionUID = -1873186146325734879L;
 	/* id */
 	private Integer id;
 
