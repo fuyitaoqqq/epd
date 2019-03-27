@@ -21,11 +21,13 @@ public interface ProjectMapper {
 
 	int addProject(Project project);
 
-	int deleteProjectById(@Param("id") Integer id);
+	int deleteProjectByShorthand(String shorthand);
 
 	int updateProject(Project project);
 
-	Project getProjectById(@Param("id") Integer id);
+	Project getProjectByShorthand(String shorthand);
+
+	Project getProjectById(Integer id);
 
 	List<Project> getProjects();
 }

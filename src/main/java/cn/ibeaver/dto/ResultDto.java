@@ -8,6 +8,8 @@ import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import lombok.Data;
 
+import javax.xml.transform.Result;
+
 /**
  * @ClassName ResultDto
  * @Description TODO 返回DTO
@@ -32,6 +34,10 @@ public class ResultDto {
 		this.code = code;
 		this.msg = msg;
 		this.data = data;
+	}
+
+	public static ResultDto success(Integer code, String msg, Object data) {
+		return new ResultDto(code, msg, data);
 	}
 
 	public static ResultDto success(Object data) {

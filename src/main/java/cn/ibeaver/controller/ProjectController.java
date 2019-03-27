@@ -5,15 +5,15 @@ package cn.ibeaver.controller;
 
 import cn.ibeaver.dto.ResultContants;
 import cn.ibeaver.dto.ResultDto;
-import cn.ibeaver.pojo.Module;
 import cn.ibeaver.pojo.Project;
 import cn.ibeaver.service.IModuleService;
-import cn.ibeaver.service.IProjectService;
+import cn.ibeaver.service.ProjectService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,19 +37,19 @@ import java.util.Map;
 public class ProjectController {
 
 	@Autowired
-	private IProjectService projectService;
+	private ProjectService projectService;
 
 	@Autowired
 	private IModuleService moduleService;
 
 	@ApiOperation(value = "获取项目列表", httpMethod = "GET")
-	@RequestMapping(value = "/project", method = RequestMethod.GET,
+	@RequestMapping(value = "/projects", method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResultDto getIndex() {
 		List<Project> projectList = projectService.getProjects();
 
 		if (projectList.size() == 0) {
-			return ResultDto.fail(ResultContants.DATA_BLANK.getCode(), ResultContants.DATA_BLANK.getMsg());
+			return ResultDto.fail(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase());
 		} else {
 			return ResultDto.success(projectList);
 		}
@@ -57,19 +57,14 @@ public class ProjectController {
 
 	@ApiOperation(value = "获取项目详情", notes = "返回该项目所属的模块详情", httpMethod = "GET",
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@RequestMapping(value = "/project/{id}", method = RequestMethod.GET,
+	@RequestMapping(value = "/project/{shorthand}", method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResultDto getProjectById(@PathVariable("id") Integer id) {
-		Project project = projectService.getProjectById(id);
+	public ResultDto getProjectByShorthand(@PathVariable("shorthand") String shorthand) {
+		Project project = projectService.getProjectByShorthand(shorthand);
 		if (project == null) {
-			return ResultDto.fail(ResultContants.DATA_BLANK.getCode(), ResultContants.DATA_BLANK.getMsg());
-		} else {
-			Map map = new HashMap(); //存放项目下的模块相关数据
-			List<Module> moduleList = moduleService.getModulesByProjectId(id);
-			map.put("project", project);
-			map.put("moduleList", moduleList);
-			return ResultDto.success(map);
+			return ResultDto.fail(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase());
 		}
+		return ResultDto.success(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), project);
 	}
 
 	@ApiOperation(value = "创建项目", httpMethod = "POST",
@@ -85,15 +80,17 @@ public class ProjectController {
 	@RequestMapping(value = "/project", method = RequestMethod.POST,
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResultDto addProject(@ApiIgnore Project project) {
-		int i = projectService.addProject(project);
-		return ifSuccess(i);
+		projectService.addProject(project);
+		Project projectById = projectService.getProjectById(project.getId());
+
+		return ResultDto.success(HttpStatus.CREATED.value(), HttpStatus.CREATED.getReasonPhrase(), projectById.getShorthand());
 	}
 
 	@ApiOperation(value = "删除项目", httpMethod = "DELETE", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@RequestMapping(value = "/project/{id}", method = RequestMethod.DELETE,
+	@RequestMapping(value = "/project/{shorthand}", method = RequestMethod.DELETE,
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResultDto deleteProject(@PathVariable("id") Integer id) {
-		int i = projectService.deleteProjectById(id);
+	public ResultDto deleteProject(@PathVariable("shorthand") String shorthand) {
+		int i = projectService.deleteProjectByShorthand(shorthand);
 		return ifSuccess(i);
 	}
 
@@ -106,11 +103,14 @@ public class ProjectController {
 			@ApiImplicitParam(name = "requestSuccess", value = "全局参数：成功返回参数", required = false, dataType = "string", paramType = "query"),
 			@ApiImplicitParam(name = "requestFail", value = "全局参数：失败返回参数", required = false, dataType = "string", paramType = "query")
 	})
-	@RequestMapping(value = "/project/{id}", method = RequestMethod.PUT,
+	@RequestMapping(value = "/project/{shorthand}", method = RequestMethod.PUT,
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResultDto updateProject(Project project) {
-		int i = projectService.updateProject(project);
-		return ifSuccess(i);
+	public ResultDto updateProject(@PathVariable("shorthand") String shorthand, Project project) {
+		if (shorthand.equals(project.getShorthand())) {
+			int i = projectService.updateProject(project);
+			return ifSuccess(i);
+		}
+		return ResultDto.fail(ResultContants.SYS_ERR.getCode(), ResultContants.SYS_ERR.getMsg());
 	}
 
 	private ResultDto ifSuccess(Integer i) {

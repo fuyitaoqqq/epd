@@ -19,11 +19,32 @@ import java.util.Date;
 public class Project implements Serializable {
 
 	private static final long serialVersionUID = -8871894551565447839L;
+
+
 	/* id */
+
 	private Integer id;
 
 	/* 项目名称 */
 	private String name;
+
+	/* 项目名转拼音 */
+	private String shorthand;
+
+	/* 项目描述 */
+	private String description;
+
+	/* base url */
+	private String baseUrl;
+
+	/* 0：私有，1：公开 */
+	private Integer open = 0;
+
+	/* 所有者 */
+	private Integer owner;
+
+	/* 统一返回格式 */
+	private String returnFormat;
 
 	/* 创建时间 */
 	private Date createTime;
@@ -31,18 +52,4 @@ public class Project implements Serializable {
 	/* 修改时间 */
 	private Date updateTime;
 
-	/* 项目描述 */
-	private String description;
-
-	/* 项目全局参数，请求头 */
-	private String requestHeader;
-
-	/* 项目全局参数，请求参数 */
-	private String requestParam;
-
-	/* 项目全局参数，成功返回参数 */
-	private String requestSuccess;
-
-	/* 项目全局参数，失败返回参数 */
-	private String requestFail;
 }

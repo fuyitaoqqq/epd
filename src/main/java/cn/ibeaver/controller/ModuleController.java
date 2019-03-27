@@ -6,16 +6,14 @@ package cn.ibeaver.controller;
 import cn.ibeaver.dto.ResultContants;
 import cn.ibeaver.dto.ResultDto;
 import cn.ibeaver.pojo.Module;
-import cn.ibeaver.pojo.Project;
 import cn.ibeaver.service.IModuleService;
-import cn.ibeaver.service.IProjectService;
+import cn.ibeaver.service.ProjectService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,7 +36,7 @@ public class ModuleController {
 	private IModuleService moduleService;
 
 	@Autowired
-	private IProjectService projectService;
+	private ProjectService projectService;
 
 	@ApiOperation(value = "添加模块", notes = "添加模块", httpMethod = "POST",
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -122,10 +120,10 @@ public class ModuleController {
 	}
 
 	private Boolean ifProjectExist(Integer projectId) {
-		Project project = projectService.getProjectById(projectId);
-		if (project != null) {
-			return true;
-		}
+//		Project project = projectService.getProjectById(projectId);
+//		if (project != null) {
+//			return true;
+//		}
 		return false;
 	}
 
