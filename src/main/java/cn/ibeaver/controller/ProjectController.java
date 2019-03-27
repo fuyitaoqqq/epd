@@ -3,6 +3,7 @@
  */
 package cn.ibeaver.controller;
 
+import cn.ibeaver.dto.ProjectDto;
 import cn.ibeaver.dto.ResultContants;
 import cn.ibeaver.dto.ResultDto;
 import cn.ibeaver.pojo.Project;
@@ -13,6 +14,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,11 +50,17 @@ public class ProjectController {
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResultDto getIndex() {
 		List<Project> projectList = projectService.getProjects();
-
+		List<ProjectDto> list = new ArrayList<>();
+		for (Project project : projectList) {
+			ProjectDto dto = new ProjectDto();
+			BeanCopier beanCopier = BeanCopier.create(Project.class, ProjectDto.class, false);
+			beanCopier.copy(project, dto, null);
+			list.add(dto);
+		}
 		if (projectList.size() == 0) {
 			return ResultDto.fail(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase());
 		} else {
-			return ResultDto.success(projectList);
+			return ResultDto.success(list);
 		}
 	}
 
@@ -61,10 +70,15 @@ public class ProjectController {
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResultDto getProjectByShorthand(@PathVariable("shorthand") String shorthand) {
 		Project project = projectService.getProjectByShorthand(shorthand);
+
+		ProjectDto dto = new ProjectDto();
+		BeanCopier beanCopier = BeanCopier.create(Project.class, ProjectDto.class, false);
+		beanCopier.copy(project, dto, null);
+
 		if (project == null) {
 			return ResultDto.fail(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase());
 		}
-		return ResultDto.success(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), project);
+		return ResultDto.success(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), dto);
 	}
 
 	@ApiOperation(value = "创建项目", httpMethod = "POST",

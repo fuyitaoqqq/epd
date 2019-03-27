@@ -28,7 +28,7 @@ public class Project implements Serializable {
 	/* 项目名称 */
 	private String name;
 
-	/* 项目名转拼音 */
+	/* 唯一标识 */
 	private String shorthand;
 
 	/* 项目描述 */
