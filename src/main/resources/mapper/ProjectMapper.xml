@@ -75,6 +75,7 @@
         SELECT
         <include refid="projectColumnsExpectId" />
         FROM epd.project
+        /*WHERE owner=#{owner} or open=1*/
         ORDER BY create_time DESC
     </select>
 

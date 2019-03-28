@@ -14,9 +14,6 @@ user:
     uuid
     name
     password
-    phone
-    email
-    project_list
     token
     ...
 
