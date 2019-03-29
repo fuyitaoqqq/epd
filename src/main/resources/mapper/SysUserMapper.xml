@@ -3,9 +3,4 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="cn.ibeaver.dao.SysUserMapper">
-
-    <insert id="saveUser" parameterType="cn.ibeaver.pojo.SysUser">
-        insert into epd.sys_user (login_name, password, salt) VALUES (#{loginName}, #{password}, #{salt});
-    </insert>
-
 </mapper>

@@ -28,8 +28,4 @@ public class SysUserService {
         return sysUser;
     }
 
-    public int saveUser(SysUser user){
-        return userMapper.saveUser(user);
-    }
-
 }

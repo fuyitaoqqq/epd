@@ -1,6 +1,7 @@
 package cn.ibeaver.filter;
 
 import cn.ibeaver.pojo.SysUser;
+import cn.ibeaver.utils.TokenUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -8,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -42,15 +44,14 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response) throws AuthenticationException {
         try {
-            SysUser user = new ObjectMapper().readValue(request.getInputStream(), SysUser.class);
+            String loginName = request.getParameter("loginName");
+            String password = request.getParameter("password");
 
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            user.getLoginName(),
-                            user.getPassword(),
-                            new ArrayList<>()
-                            ));
-        } catch (IOException e) {
+                            loginName, password, new ArrayList<>()
+                    ));
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
@@ -69,12 +70,25 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
                                             HttpServletResponse response,
                                             FilterChain chain,
                                             Authentication authResult) throws IOException, ServletException {
-        String token = Jwts.builder()
-                .setSubject(((org.springframework.security.core.userdetails.User) authResult.getPrincipal()).getUsername())
-                .setExpiration(new Date(System.currentTimeMillis() + 60 * 60 * 24 * 1000))
-                .signWith(SignatureAlgorithm.HS512, "MyJwtSecret")
-                .compact();
 
-        response.addHeader("Authorization", "Bearer " + token);
+
+        String username = ((User) authResult.getPrincipal()).getUsername();
+
+        String token = TokenUtil.createToken(username, false);
+
+        response.addHeader(TokenUtil.TOKEN_HEADER, TokenUtil.TOKEN_PREFIX + token);
+    }
+
+    /**
+     * 验证失败
+     * @param request
+     * @param response
+     * @param failed
+     * @throws IOException
+     * @throws ServletException
+     */
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+        response.getWriter().write("Authentication failed, reason: " + failed.getMessage());
     }
 }

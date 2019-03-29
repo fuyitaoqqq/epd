@@ -32,13 +32,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http./*cors().and().*/csrf().disable()
+        http.cors().and().csrf().disable()
                 //所有请求进行验证
                 .authorizeRequests()
                 //对指定url放行
                 .antMatchers(HttpMethod.POST, "/register").permitAll()
                 //所有请求需要身份认证
                 .anyRequest().authenticated()
+                .and()
+                .logout()
                 // 权限检查
                 //.antMatchers("/hello").hasAuthority("AUTH_WRITE")
                 // 角色检查

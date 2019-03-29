@@ -1,6 +1,7 @@
 package cn.ibeaver.filter;
 
 
+import cn.ibeaver.utils.TokenUtil;
 import io.jsonwebtoken.Jwts;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,34 +28,27 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        String header = request.getHeader("Authorization");
+        String header = request.getHeader(TokenUtil.TOKEN_HEADER);
 
-        if (header == null || !header.startsWith("Bearer ")) {
+        if (header == null || !header.startsWith(TokenUtil.TOKEN_PREFIX)) {
             chain.doFilter(request, response);
             return;
         }
 
-        UsernamePasswordAuthenticationToken authentication = getAuthentication(request);
+        UsernamePasswordAuthenticationToken authentication = getAuthentication(header);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         chain.doFilter(request, response);
     }
 
-    private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
-        if (token != null) {
-            // parse the token.
-            String user = Jwts.parser()
-                    .setSigningKey("MyJwtSecret")
-                    .parseClaimsJws(token.replace("Bearer ", ""))
-                    .getBody()
-                    .getSubject();
+    private UsernamePasswordAuthenticationToken getAuthentication(String header) {
+        String token = header.replace(TokenUtil.TOKEN_PREFIX, "");
+        String principal = TokenUtil.getUsername(token);
 
-            if (user != null) {
-                return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
-            }
-            return null;
+        if (principal != null) {
+            return new UsernamePasswordAuthenticationToken(principal, null, new ArrayList<>());
         }
+
         return null;
     }
 

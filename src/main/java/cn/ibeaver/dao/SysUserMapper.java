@@ -11,13 +11,4 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public interface SysUserMapper extends BaseMapper<SysUser> {
-
-    /**
-     * 保存
-     * @param user
-     * @return
-     */
-    @Insert("saveUser")
-    int saveUser(SysUser user);
-
 }
