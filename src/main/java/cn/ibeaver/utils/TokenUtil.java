@@ -1,6 +1,7 @@
 package cn.ibeaver.utils;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -59,7 +60,13 @@ public class TokenUtil {
      * @return
      */
     public static String getUsername(String token){
-        return getTokenBody(token).getSubject();
+
+        if (getTokenBody(token) == null) {
+            return null;
+        } else {
+            return getTokenBody(token).getSubject();
+        }
+
     }
 
     /**
@@ -72,10 +79,15 @@ public class TokenUtil {
     }
 
     private static Claims getTokenBody(String token){
-        return Jwts.parser()
-                .setSigningKey(SECRET)
-                .parseClaimsJws(token)
-                .getBody();
+        try {
+            Claims body = Jwts.parser()
+                    .setSigningKey(SECRET)
+                    .parseClaimsJws(token)
+                    .getBody();
+            return body;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }

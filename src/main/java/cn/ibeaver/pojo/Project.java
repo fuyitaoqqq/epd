@@ -3,6 +3,8 @@
  */
 package cn.ibeaver.pojo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -20,9 +22,8 @@ public class Project implements Serializable {
 
 	private static final long serialVersionUID = -8871894551565447839L;
 
-
 	/* id */
-
+	@TableId(type = IdType.AUTO)
 	private Integer id;
 
 	/* 项目名称 */

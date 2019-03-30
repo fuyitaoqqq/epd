@@ -5,16 +5,16 @@
 <mapper namespace="cn.ibeaver.dao.ProjectMapper">
 
     <resultMap id="projectsList" type="project">
-        <id column="id" property="id" />
-        <result column="name" property="name" />
-        <result column="shorthand" property="shorthand" />
-        <result column="description" property="description" />
-        <result column="base_url" property="baseUrl" />
-        <result column="open" property="open" />
-        <result column="owner" property="owner" />
-        <result column="return_format" property="returnFormat" />
-        <result column="create_time" property="createTime" />
-        <result column="update_time" property="updateTime" />
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="shorthand" property="shorthand" jdbcType="VARCHAR" />
+        <result column="description" property="description" jdbcType="VARCHAR" />
+        <result column="base_url" property="baseUrl" jdbcType="VARCHAR" />
+        <result column="open" property="open" jdbcType="TINYINT" />
+        <result column="owner" property="owner" jdbcType="INTEGER" />
+        <result column="return_format" property="returnFormat" jdbcType="VARCHAR"  />
+        <result column="create_time" property="createTime" jdbcType="DATE" />
+        <result column="update_time" property="updateTime" jdbcType="DATE"  />
     </resultMap>
     
     <sql id="projectAllColumns">
@@ -73,9 +73,8 @@
 
     <select id="getProjects" resultMap="projectsList">
         SELECT
-        <include refid="projectColumnsExpectId" />
+        <include refid="projectAllColumns" />
         FROM epd.project
-        /*WHERE owner=#{owner} or open=1*/
         ORDER BY create_time DESC
     </select>
 

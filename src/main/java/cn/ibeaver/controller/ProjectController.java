@@ -50,16 +50,17 @@ public class ProjectController {
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResultDto getIndex() {
 		List<Project> projectList = projectService.getProjects();
-		List<ProjectDto> list = new ArrayList<>();
-		for (Project project : projectList) {
-			ProjectDto dto = new ProjectDto();
-			BeanCopier beanCopier = BeanCopier.create(Project.class, ProjectDto.class, false);
-			beanCopier.copy(project, dto, null);
-			list.add(dto);
-		}
+
 		if (projectList.size() == 0) {
 			return ResultDto.fail(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase());
 		} else {
+			List<ProjectDto> list = new ArrayList<>();
+			for (Project project : projectList) {
+				ProjectDto dto = new ProjectDto();
+				BeanCopier beanCopier = BeanCopier.create(Project.class, ProjectDto.class, false);
+				beanCopier.copy(project, dto, null);
+				list.add(dto);
+			}
 			return ResultDto.success(list);
 		}
 	}
