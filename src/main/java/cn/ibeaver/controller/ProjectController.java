@@ -17,16 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @ClassName IndexController
@@ -94,11 +89,12 @@ public class ProjectController {
 	})
 	@RequestMapping(value = "/project", method = RequestMethod.POST,
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResultDto addProject(@ApiIgnore Project project) {
+	public ResultDto addProject(@ApiIgnore @RequestBody Project project) {
+		project.setOwner(0);
 		projectService.addProject(project);
 		Project projectById = projectService.getProjectById(project.getId());
 
-		return ResultDto.success(HttpStatus.CREATED.value(), HttpStatus.CREATED.getReasonPhrase(), projectById.getShorthand());
+		return ResultDto.success(HttpStatus.CREATED.value(), HttpStatus.CREATED.getReasonPhrase(), project);
 	}
 
 	@ApiOperation(value = "删除项目", httpMethod = "DELETE", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -120,7 +116,7 @@ public class ProjectController {
 	})
 	@RequestMapping(value = "/project/{shorthand}", method = RequestMethod.PUT,
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResultDto updateProject(@PathVariable("shorthand") String shorthand, Project project) {
+	public ResultDto updateProject(@PathVariable("shorthand") String shorthand, @RequestBody Project project) {
 		if (shorthand.equals(project.getShorthand())) {
 			int i = projectService.updateProject(project);
 			return ifSuccess(i);

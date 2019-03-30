@@ -2,16 +2,14 @@ package cn.ibeaver.config;
 
 import cn.ibeaver.filter.JwtAuthenticationFilter;
 import cn.ibeaver.filter.JwtLoginFilter;
-import cn.ibeaver.service.SysUserService;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.cors.CorsUtils;
 
 /**
  * @author: fuyitao
@@ -35,17 +33,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable()
                 //所有请求进行验证
                 .authorizeRequests()
+                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 //对指定url放行
-                //.antMatchers(HttpMethod.POST, "/login").permitAll()
+                .antMatchers(HttpMethod.POST, "/login").permitAll()
                 //所有请求需要身份认证
                 .anyRequest().authenticated()
-                //.and()
+                .and()
                 //.logout()
                 // 权限检查
                 //.antMatchers("/hello").hasAuthority("AUTH_WRITE")
                 // 角色检查
                 //.antMatchers("/world").hasRole("ADMIN")
-                .and()
+                //.and()
+                //.formLogin().loginPage("/login")
+                //.and()
                 .addFilter(new JwtLoginFilter(authenticationManager()))
                 .addFilter(new JwtAuthenticationFilter(authenticationManager()));
     }
@@ -54,5 +55,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
     }
+
+    /*@Bean
+    public HttpFirewall allowUrlEncodedSlashHttpFirewall() {
+        StrictHttpFirewall firewall = new StrictHttpFirewall();
+        firewall.setAllowUrlEncodedSlash(true);
+        return firewall;
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        super.configure(web);
+        web.httpFirewall(allowUrlEncodedSlashHttpFirewall());
+    }*/
 
 }

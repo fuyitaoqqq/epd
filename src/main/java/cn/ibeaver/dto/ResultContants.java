@@ -22,7 +22,9 @@ public enum ResultContants {
 	DATA_BLANK(-2,"没有数据！"),
 
 	/* 系统错误 */
-	SYS_ERR(-3,"系统错误！");
+	SYS_ERR(-3,"系统错误！"),
+
+	BAD_CREDENTIAL(-6, "Authentication failed");
 
 	private Integer code;
 	private String msg;
