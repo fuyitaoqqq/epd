@@ -77,7 +77,7 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
         String token = TokenUtil.createToken(username, false);
 
         response.addHeader(TokenUtil.TOKEN_HEADER, TokenUtil.TOKEN_PREFIX + token);
-        response.getWriter().println("{\"code\":200, \"msg\":\"SUCCESS\", \"data\":\"" + TokenUtil.TOKEN_PREFIX + token + "\"}");
+        response.getWriter().println("{\"code\":"+ResultContants.SUCCESS.getCode()+", \"msg\":\""+ResultContants.SUCCESS.getMsg()+"\", \"data\":\"" + TokenUtil.TOKEN_PREFIX + token + "\"}");
     }
 
     /**

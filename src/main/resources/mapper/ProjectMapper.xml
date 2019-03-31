@@ -67,7 +67,7 @@
 
     <select id="getProjectByShorthand" parameterType="string" resultType="project">
         SELECT
-        <include refid="projectColumnsExpectId" />
+        <include refid="projectAllColumns" />
         FROM epd.project WHERE shorthand = #{shorthand}
     </select>
 

@@ -11,7 +11,7 @@
  Target Server Version : 50725
  File Encoding         : 65001
 
- Date: 30/03/2019 12:37:12
+ Date: 31/03/2019 23:05:39
 */
 
 SET NAMES utf8mb4;
@@ -68,13 +68,44 @@ CREATE TABLE `project`  (
   `description` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '项目说明',
   `base_url` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `open` tinyint(4) NOT NULL COMMENT '是否公开 default 0 私有，1 公开',
-  `owner` int(11) NOT NULL COMMENT '项目所有者，userid',
+  `owner` int(11) NOT NULL DEFAULT 0 COMMENT '项目所有者，userid',
   `return_format` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '统一返回格式',
   `create_time` datetime(0) NOT NULL COMMENT '项目创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '项目信息更新时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `project_id_uindex`(`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '项目实体类' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '项目实体类' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of project
+-- ----------------------------
+INSERT INTO `project` VALUES (1, 'project', 'b56872a2e7a345cfb32ed7d02168e79f', 'project desription', NULL, 0, 1, NULL, '2019-03-29 23:12:02', NULL);
+INSERT INTO `project` VALUES (2, '0330测试', 'ab38091f27e546159286bb4a516c2890', '创建测试', '/test', 0, 0, NULL, '2019-03-30 03:28:24', NULL);
+INSERT INTO `project` VALUES (3, '0330测试', '70d08aa62c06425db4a2da5b6b700ec0', '创建测试', '/test', 0, 0, NULL, '2019-03-30 03:30:17', NULL);
+INSERT INTO `project` VALUES (4, '的机房建设会计', 'b27ce78ec91d4fb5ba1d58d2f7ea70fc', '撒打开集合', '阿迪王', 1, 0, NULL, '2019-03-30 04:45:22', NULL);
+
+-- ----------------------------
+-- Table structure for project_map
+-- ----------------------------
+DROP TABLE IF EXISTS `project_map`;
+CREATE TABLE `project_map`  (
+  `id` int(11) NOT NULL,
+  `project_id` int(11) NOT NULL,
+  `module_id` int(11) NOT NULL,
+  `module_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `api_id` int(11) NOT NULL,
+  `api_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `create_time` datetime(0) NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `project_map_id_uindex`(`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of project_map
+-- ----------------------------
+INSERT INTO `project_map` VALUES (1, 1, 1, '登陆相关功能', 1, '登陆接口详情', '2019-03-31 05:13:04');
+INSERT INTO `project_map` VALUES (2, 1, 1, '登陆相关功能', 2, '退出登陆', '2019-03-31 05:13:57');
+INSERT INTO `project_map` VALUES (3, 1, 2, '商品模块', 3, '商品详情', '2019-03-31 05:14:33');
 
 -- ----------------------------
 -- Table structure for sys_permission
@@ -125,6 +156,11 @@ CREATE TABLE `sys_user`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `sys_user_id_uindex`(`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of sys_user
+-- ----------------------------
+INSERT INTO `sys_user` VALUES (2, 'admin', '$2a$10$uvfq7ZJbt8UoiIUCk3OkMe9Kv41P4IxyCo9VYM.qQk7kjgQcACiIa');
 
 -- ----------------------------
 -- Table structure for sys_user_ext

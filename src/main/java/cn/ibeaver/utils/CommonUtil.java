@@ -2,9 +2,6 @@ package cn.ibeaver.utils;/**
  * Created by fuyitao on 19-3-22.
  */
 
-import cn.ibeaver.pojo.Module;
-import cn.ibeaver.service.IModuleService;
-import cn.ibeaver.service.impl.ModuleServiceImpl;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import org.apache.commons.lang3.StringUtils;
 
@@ -81,12 +78,6 @@ public class CommonUtil {
 
 	public static String generateUUID() {
 		return UUID.randomUUID().toString().replace("-", "");
-	}
-
-	public static void main(String[] args) {
-//		String pinYin = getHanziPinYin("Animal");
-//		System.out.println(pinYin);
-		System.out.println(generateUUID());
 	}
 
 }

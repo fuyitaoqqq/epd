@@ -1,8 +1,8 @@
 package cn.ibeaver.filter;
 
 
+import cn.ibeaver.dto.ResultContants;
 import cn.ibeaver.utils.TokenUtil;
-import io.jsonwebtoken.Jwts;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,8 +37,15 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
 
         UsernamePasswordAuthenticationToken authentication = getAuthentication(header);
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        chain.doFilter(request, response);
+        if (authentication != null) {
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            chain.doFilter(request, response);
+        } else {
+            response.getWriter().println(
+                    "{\"code\":" + ResultContants.BAD_CREDENTIAL.getCode()
+                    + ", \"msg\":\"" + ResultContants.BAD_CREDENTIAL.getMsg()
+                    + "\", \"data\":null}");
+        }
     }
 
     private UsernamePasswordAuthenticationToken getAuthentication(String header) {

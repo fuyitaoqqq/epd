@@ -13,16 +13,16 @@ package cn.ibeaver.dto;
 public enum ResultContants {
 
 	/* 成功返回 */
-	SUCCESS(0, "SUCCESS!"),
+	SUCCESS(0, "SUCCESS"),
 
 	/* 参数错误 */
-	PARAM_ERR(-1, "参数错误！"),
+	PARAM_ERR(-1, "参数错误"),
 
 	/* 没有数据 */
-	DATA_BLANK(-2,"没有数据！"),
+	DATA_BLANK(-2,"资源未找到"),
 
 	/* 系统错误 */
-	SYS_ERR(-3,"系统错误！"),
+	SYS_ERR(-3,"系统错误"),
 
 	BAD_CREDENTIAL(-6, "Authentication failed");
 

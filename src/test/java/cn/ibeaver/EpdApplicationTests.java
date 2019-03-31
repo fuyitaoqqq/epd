@@ -1,6 +1,7 @@
 package cn.ibeaver;
 
-import cn.ibeaver.pojo.Project;
+import cn.ibeaver.pojo.ProjectMap;
+import cn.ibeaver.service.ProjectMapService;
 import cn.ibeaver.service.ProjectService;
 import cn.ibeaver.service.SysUserService;
 import org.junit.Test;
@@ -21,8 +22,14 @@ public class EpdApplicationTests {
 	@Autowired
 	private ProjectService projectService;
 
-	public void testProjectService() {
+	@Autowired
+	private ProjectMapService projectMapService;
 
+	public void testProjectService() {
+		List<ProjectMap> map = projectMapService.getProjectMapByProjectId(1);
+		for (ProjectMap projectMap : map) {
+			System.out.println(projectMap);
+		}
 
 	}
 

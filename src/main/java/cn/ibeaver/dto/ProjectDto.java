@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class ProjectDto implements Serializable {
@@ -34,5 +35,17 @@ public class ProjectDto implements Serializable {
 
     /* 修改时间 */
     private Date updateTime;
+
+    private List<ModuleMapDto> moduleList;
+
+    /*private ProjectDto() {}
+
+    private static class ProjectDtoHolder {
+        private final static ProjectDto instance = new ProjectDto();
+    }
+
+    public static ProjectDto getInstance() {
+        return ProjectDtoHolder.instance;
+    }*/
 
 }
