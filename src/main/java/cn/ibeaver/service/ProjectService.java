@@ -4,12 +4,16 @@
 package cn.ibeaver.service;
 
 import cn.ibeaver.dao.ProjectMapper;
+import cn.ibeaver.dto.ResultContants;
+import cn.ibeaver.pojo.Module;
 import cn.ibeaver.pojo.Project;
+import cn.ibeaver.pojo.ProjectMap;
+import cn.ibeaver.pojo.SysUser;
 import cn.ibeaver.utils.CommonUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -27,33 +31,86 @@ public class ProjectService {
 	@Autowired
 	private ProjectMapper projectMapper;
 
-	public int addProject(Project project) {
+	@Autowired
+	private ProjectMapService projectMapService;
+
+	@Autowired
+	private ModuleService moduleService;
+
+	public int addProject(Project project, SysUser user) {
 		project.setShorthand(CommonUtil.generateUUID());
 		project.setCreateTime(new Date());
-		return projectMapper.addProject(project);
+		project.setOwner(user.getId());
+		project.setOwnerName(user.getLoginName());
+		int i = projectMapper.insert(project);
+
+		ProjectMap projectMap = new ProjectMap();
+		projectMap.setName(project.getName());
+		projectMap.setProjectId(project.getId());
+
+		int j = projectMapService.insert(projectMap);
+
+		if (i ==0 && j == 0) {
+			return ResultContants.SYS_ERR.getCode();
+		}
+
+		return ResultContants.SUCCESS.getCode();
 	}
 
+	@Transactional
 	public int deleteProjectByShorthand(String shorthand) {
-		return projectMapper.deleteProjectByShorthand(shorthand);
+
+		Project project = getProjectByShorthand(shorthand);
+
+		List<Module> moduleList = moduleService.getListByProjectId(project.getId());
+		if (moduleList.size() == 0) {
+			int i = projectMapper.deleteProjectByShorthand(shorthand);
+			if (i == 1) {
+				return ResultContants.SUCCESS.getCode();
+			} else {
+				return ResultContants.SYS_ERR.getCode();
+			}
+		}
+
+		return ResultContants.DISABLE_OPERATION.getCode();
 	}
 
 	public int updateProject(Project project) {
 		project.setUpdateTime(new Date());
-		return projectMapper.updateProject(project);
+		QueryWrapper<Project> wrapper = new QueryWrapper<>();
+		wrapper.eq("shorthand", project.getShorthand());
+		int i = projectMapper.update(project, wrapper);
+
+		Project projectByShorthand = getProjectByShorthand(project.getShorthand());
+
+		ProjectMap projectMap = projectMapService.getByProjectId(projectByShorthand.getId());
+		projectMap.setName(project.getName());
+		int j = projectMapService.updateById(projectMap);
+
+		if (i == 0 && j == 0) {
+			return ResultContants.SYS_ERR.getCode();
+		}
+
+		return ResultContants.SUCCESS.getCode();
 	}
 
 	public Project getProjectByShorthand(String shorthand) {
-		return projectMapper.getProjectByShorthand(shorthand);
+		QueryWrapper<Project> wrapper = new QueryWrapper<>();
+		wrapper.eq("shorthand", shorthand);
+		return projectMapper.selectOne(wrapper);
 	}
 
 	public List<Project> getProjects(Integer owner) {
 		QueryWrapper<Project> wrapper = new QueryWrapper<>();
-		wrapper.eq("owner", owner).or().eq("open", 1);
+		wrapper.eq("owner", owner).or().eq("open", 1).orderByDesc("create_time");
 		return projectMapper.selectList(wrapper);
 	}
 
 	public Project getProjectById(Integer id) {
-		return projectMapper.getProjectById(id);
+		QueryWrapper<Project> wrapper = new QueryWrapper<>();
+		wrapper.eq("id", id);
+
+		return projectMapper.selectOne(wrapper);
 	}
 
 }

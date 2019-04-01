@@ -5,10 +5,7 @@ package cn.ibeaver.dao;
 
 import cn.ibeaver.pojo.Project;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * @ClassName ProjectMapper
@@ -25,8 +22,6 @@ public interface ProjectMapper extends BaseMapper<Project> {
 	int deleteProjectByShorthand(String shorthand);
 
 	int updateProject(Project project);
-
-	Project getProjectByShorthand(String shorthand);
 
 	Project getProjectById(Integer id);
 }

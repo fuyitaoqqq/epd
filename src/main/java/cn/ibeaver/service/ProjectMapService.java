@@ -73,4 +73,20 @@ public class ProjectMapService {
         return projectMapMapper.delete(wrapper);
     }
 
+    public ProjectMap getModuleByProjectIdAndModuleId(Integer moduleId, Integer projectId) {
+        QueryWrapper<ProjectMap> wrapper = new QueryWrapper<>();
+        wrapper.eq("module_id", moduleId).eq("pid", projectId);
+        return projectMapMapper.selectOne(wrapper);
+    }
+
+    public int updateById(ProjectMap projectMap) {
+        return projectMapMapper.updateById(projectMap);
+    }
+
+    public ProjectMap getByProjectId(Integer projectId) {
+        QueryWrapper<ProjectMap> wrapper = new QueryWrapper<>();
+        wrapper.eq("project_id", projectId);
+        return projectMapMapper.selectOne(wrapper);
+    }
+
 }

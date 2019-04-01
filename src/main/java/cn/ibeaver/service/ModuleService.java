@@ -3,14 +3,14 @@ package cn.ibeaver.service;/**
  */
 
 import cn.ibeaver.dao.ModuleMapper;
+import cn.ibeaver.dto.ResultContants;
 import cn.ibeaver.pojo.Module;
 import cn.ibeaver.pojo.ProjectMap;
 import cn.ibeaver.pojo.SysUser;
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -31,46 +31,76 @@ public class ModuleService {
 	@Autowired
 	private ProjectMapService projectMapService;
 
+	@Transactional
 	public int addModule(Module module, SysUser user, Integer projectId) {
+		module.setProjectId(projectId);
 		module.setCreateTime(new Date());
 		module.setCreateBy(user.getId());
 		module.setCreateByName(user.getLoginName());
-		moduleMapper.insert(module);
+		int i = moduleMapper.insert(module);
 
 		ProjectMap projectMap = new ProjectMap();
 		projectMap.setModuleId(module.getId());
 		projectMap.setName(module.getName());
-		projectMap.setPid(projectId);
 		projectMap.setUri(module.getUri());
-		projectMapService.insert(projectMap);
 
-		return 0;
+		ProjectMap byProjectId = projectMapService.getByProjectId(projectId);
+
+		projectMap.setPid(byProjectId.getId());
+
+		int j = projectMapService.insert(projectMap);
+
+		if (i ==0 && j ==0) {
+			return ResultContants.SYS_ERR.getCode();
+		}
+		return ResultContants.SUCCESS.getCode();
 	}
 
+	@Transactional
 	public int deleteModule(Integer moduleId, Integer projectId) {
-		moduleMapper.deleteById(moduleId);
-		return projectMapService.delete("module", moduleId, projectId);
+		int i = moduleMapper.deleteById(moduleId);
+		int j = projectMapService.delete("module", moduleId, projectId);
+		if (i ==0 && j ==0) {
+			return ResultContants.SYS_ERR.getCode();
+		}
+		return ResultContants.SUCCESS.getCode();
 	}
 
+	@Transactional
 	public int updateModule(Module module, SysUser user, Integer projectId) {
 		module.setUpdateTime(new Date());
 		module.setUpdateBy(user.getId());
 		module.setUpdateByName(user.getLoginName());
-		moduleMapper.updateById(module);
+		int i = moduleMapper.updateById(module);
 
-		ProjectMap projectMap = new ProjectMap();
+		ProjectMap projectMap = projectMapService.getByProjectId(projectId);
 		projectMap.setModuleId(module.getId());
 		projectMap.setName(module.getName());
 		projectMap.setPid(projectId);
 		projectMap.setUri(module.getUri());
 
-		return 0;
+		ProjectMap moduleByIds = projectMapService.getModuleByProjectIdAndModuleId(module.getId(), projectMap.getId());
+		projectMap.setId(moduleByIds.getId());
+
+		int j = projectMapService.updateById(projectMap);
+
+		if (i == 0 && j==0) {
+			return ResultContants.SYS_ERR.getCode();
+		}
+
+		return ResultContants.SUCCESS.getCode();
 	}
 
 	public Module getModuleById(Integer moduleId) {
 		QueryWrapper<Module> wrapper = new QueryWrapper<>();
 		wrapper.eq("id", moduleId);
 		return moduleMapper.selectOne(wrapper);
+	}
+
+	public List<Module> getListByProjectId(Integer projectId) {
+		QueryWrapper<Module> wrapper = new QueryWrapper<>();
+		wrapper.eq("project_id", projectId);
+		return moduleMapper.selectList(wrapper);
 	}
 
 	/*int addModule(Module module);

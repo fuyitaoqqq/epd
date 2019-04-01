@@ -10,7 +10,6 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 /**
  * @ClassName Api
@@ -44,6 +43,11 @@ public class Module implements Serializable {
      * 模块描述
      */
     private String description;
+
+    /**
+     * 所属项目ID
+     */
+    private Integer projectId;
 
     /**
      * 创建人id

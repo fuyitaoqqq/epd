@@ -24,6 +24,8 @@ public enum ResultContants {
 	/* 系统错误 */
 	SYS_ERR(-3,"系统错误"),
 
+	DISABLE_OPERATION(-4, "禁止操作"),
+
 	BAD_CREDENTIAL(-6, "Authentication failed");
 
 	private Integer code;
@@ -40,11 +42,14 @@ public enum ResultContants {
 	public String getMsg() {
 		return msg;
 	}
-	public void setCode(Integer code) {
-		this.code = code;
-	}
-	public void setMsg(String msg) {
-		this.msg = msg;
+
+	public static Integer getByCode(Integer code) {
+		for (ResultContants result: values()) {
+			if (result.getCode() == code) {
+				return result.getCode();
+			}
+		}
+		return null;
 	}
 
 }

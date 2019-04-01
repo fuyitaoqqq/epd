@@ -5,8 +5,6 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import java.util.Date;
-
 /**
  * @author: fuyitao
  * @date: 2019/03/31
@@ -22,6 +20,8 @@ public class ProjectMap {
     private String name;
 
     private String uri;
+
+    private Integer projectId;
 
     private Integer moduleId;
 

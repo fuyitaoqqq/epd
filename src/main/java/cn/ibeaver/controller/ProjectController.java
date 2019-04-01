@@ -24,9 +24,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @ClassName IndexController
@@ -84,7 +82,9 @@ public class ProjectController {
 			BeanCopier beanCopier = BeanCopier.create(Project.class, ProjectDto.class, false);
 			beanCopier.copy(project, projectDto, null);
 
-			List<ProjectMap> modules = projectMapService.getByPid("module", project.getId());
+			ProjectMap byProjectId = projectMapService.getByProjectId(project.getId());
+
+			List<ProjectMap> modules = projectMapService.getByPid("module", byProjectId.getId());
 			List<ModuleMapDto> moduleList = new ArrayList<>();
 			for (ProjectMap module : modules) {
 				ModuleMapDto moduleMapDto = new ModuleMapDto();
@@ -125,9 +125,8 @@ public class ProjectController {
 	@RequestMapping(value = "/project", method = RequestMethod.POST)
 	public ResultDto addProject(@ApiIgnore @RequestBody Project project, Principal principal) {
 		SysUser user = sysUserService.getUserByLoginName(principal.getName());
-		project.setOwner(user.getId());
 
-		projectService.addProject(project);
+		projectService.addProject(project, user);
 
 		Project projectById = projectService.getProjectById(project.getId());
 
@@ -156,11 +155,14 @@ public class ProjectController {
 	})
 	@RequestMapping(value = "/project/{shorthand}", method = RequestMethod.PUT)
 	public ResultDto updateProject(@PathVariable("shorthand") String shorthand, @RequestBody Project project) {
-		if (shorthand.equals(project.getShorthand())) {
-			int i = projectService.updateProject(project);
-			return ifSuccess(i);
-		}
-		return ResultDto.fail(ResultContants.SYS_ERR.getCode(), ResultContants.SYS_ERR.getMsg());
+		project.setShorthand(shorthand);
+		projectService.updateProject(project);
+
+		Project projectByShorthand = projectService.getProjectByShorthand(shorthand);
+		ProjectDto projectDto = new ProjectDto();
+		BeanCopier beanCopier = BeanCopier.create(Project.class, ProjectDto.class, false);
+		beanCopier.copy(projectByShorthand, projectDto, null);
+		return ResultDto.success(ResultContants.SUCCESS.getCode(), ResultContants.SUCCESS.getMsg(), projectDto);
 	}
 
 	private ResultDto ifSuccess(Integer i) {
