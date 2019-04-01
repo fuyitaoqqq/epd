@@ -19,16 +19,14 @@ public class ProjectMap {
     @TableId(type = IdType.AUTO)
     private Integer id;
 
-    private Integer projectId;
+    private String name;
+
+    private String uri;
 
     private Integer moduleId;
 
     private Integer apiId;
 
-    private String moduleName;
-
-    private String apiName;
-
-    private Date createTime;
+    private Integer pid;
 
 }

@@ -14,6 +14,7 @@ public class ModuleMapDto {
 
     private Integer moduleId;
     private String moduleName;
+    private String uri;
     private List<ApiMapDto> apiList;
 
 }

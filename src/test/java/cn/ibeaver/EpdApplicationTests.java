@@ -25,13 +25,13 @@ public class EpdApplicationTests {
 	@Autowired
 	private ProjectMapService projectMapService;
 
-	public void testProjectService() {
+	/*public void testProjectService() {
 		List<ProjectMap> map = projectMapService.getProjectMapByProjectId(1);
 		for (ProjectMap projectMap : map) {
 			System.out.println(projectMap);
 		}
 
-	}
+	}*/
 
 
 	public void testMybatisPlusQueryWrapper() {

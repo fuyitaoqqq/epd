@@ -6,46 +6,61 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @author fuyitao
+ * @date 2019/4/1
+ */
+
 @Data
 public class ProjectDto implements Serializable {
 
-    /* 项目名称 */
+    private static final long serialVersionUID = 8334520265808184745L;
+
+    /**
+     * 项目名称
+     */
     private String name;
 
-    /* 项目名转拼音 */
+    /**
+     * 项目名转拼音
+     */
     private String shorthand;
 
-    /* 项目描述 */
+    /**
+     * 项目描述
+     */
     private String description;
 
-    /* base url */
+    /**
+     * base url
+     */
     private String baseUrl;
 
-    /* 0：私有，1：公开 */
+    /**
+     * 0：私有，1：公开
+     */
     private Integer open = 0;
 
-    /* 所有者 */
+    /**
+     * 所有者
+     */
     private Integer owner;
 
-    /* 统一返回格式 */
+    /**
+     * 统一返回格式
+     */
     private String returnFormat;
 
-    /* 创建时间 */
+    /**
+     * 创建时间
+     */
     private Date createTime;
 
-    /* 修改时间 */
+    /**
+     * 修改时间
+     */
     private Date updateTime;
 
     private List<ModuleMapDto> moduleList;
-
-    /*private ProjectDto() {}
-
-    private static class ProjectDtoHolder {
-        private final static ProjectDto instance = new ProjectDto();
-    }
-
-    public static ProjectDto getInstance() {
-        return ProjectDtoHolder.instance;
-    }*/
 
 }

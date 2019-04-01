@@ -12,5 +12,6 @@ public class ApiMapDto {
 
     private Integer apiId;
     private String apiName;
+    private String uri;
 
 }

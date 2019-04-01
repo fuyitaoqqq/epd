@@ -78,34 +78,29 @@ public class ProjectController {
 			BeanCopier beanCopier = BeanCopier.create(Project.class, ProjectDto.class, false);
 			beanCopier.copy(project, projectDto, null);
 
-			List<ProjectMap> moduleMapList = projectMapService.getModuleByProjectId(project.getId());
-			List<ModuleMapDto> moduleListToProject = new ArrayList<>();
-
-			Set<ProjectMap> moduleSet = new HashSet<>();
-			for (ProjectMap moduleList : moduleMapList) {
-				moduleSet.add(moduleList);
-			}
-
-			for (ProjectMap module : moduleSet) {
+			List<ProjectMap> modules = projectMapService.getByPid("module", project.getId());
+			List<ModuleMapDto> moduleList = new ArrayList<>();
+			for (ProjectMap module : modules) {
 				ModuleMapDto moduleMapDto = new ModuleMapDto();
 				moduleMapDto.setModuleId(module.getModuleId());
-				moduleMapDto.setModuleName(module.getModuleName());
+				moduleMapDto.setModuleName(module.getName());
+				moduleMapDto.setUri(module.getUri());
 
-				List<ApiMapDto> apiListToProject = new ArrayList<>();
-				List<ProjectMap> apiMapList = projectMapService.getApiByModuleId(module.getModuleId());
-				for (ProjectMap apiMap : apiMapList) {
+				List<ProjectMap> apis = projectMapService.getByPid("api", module.getId());
+				List<ApiMapDto> apiList = new ArrayList<>();
+				for (ProjectMap api : apis) {
 					ApiMapDto apiMapDto = new ApiMapDto();
-					apiMapDto.setApiId(apiMap.getApiId());
-					apiMapDto.setApiName(apiMap.getApiName());
-					apiListToProject.add(apiMapDto);
+					apiMapDto.setApiId(api.getApiId());
+					apiMapDto.setApiName(api.getName());
+					apiMapDto.setUri(api.getUri());
+					apiList.add(apiMapDto);
+
 				}
-
-				moduleMapDto.setApiList(apiListToProject);
-				moduleListToProject.add(moduleMapDto);
-
+				moduleMapDto.setApiList(apiList);
+				moduleList.add(moduleMapDto);
 			}
 
-			projectDto.setModuleList(moduleListToProject);
+			projectDto.setModuleList(moduleList);
 
 			return ResultDto.success(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), projectDto);
 		}

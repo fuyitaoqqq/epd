@@ -13,15 +13,28 @@ import java.util.List;
  * @date: 2019/03/31
  */
 
-@Service("projectMapService")
+@Service
 public class ProjectMapService {
 
     @Autowired
     private ProjectMapMapper projectMapMapper;
 
-    public List<ProjectMap> getProjectMapByProjectId(Integer projectId) {
+    public List<ProjectMap> getByPid(String select, Integer pid) {
+
+        switch (select) {
+            case "module":
+                select = "module_id";
+                break;
+            case "api":
+                select = "api_id";
+                break;
+            default:
+                select = "module_id";
+        }
+
         QueryWrapper<ProjectMap> wrapper = new QueryWrapper<>();
-        wrapper.eq("project_id", projectId);
+        wrapper.select("id", "name", "uri", select);
+        wrapper.eq("pid", pid);
         return projectMapMapper.selectList(wrapper);
     }
 
