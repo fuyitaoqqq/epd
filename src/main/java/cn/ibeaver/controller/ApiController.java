@@ -3,25 +3,8 @@
  */
 package cn.ibeaver.controller;
 
-import cn.ibeaver.dto.ResultContants;
-import cn.ibeaver.dto.ResultDto;
-import cn.ibeaver.pojo.Api;
-import cn.ibeaver.pojo.Module;
-import cn.ibeaver.service.IApiService;
-import cn.ibeaver.service.IModuleService;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import springfox.documentation.annotations.ApiIgnore;
-
-import java.awt.*;
 
 /**
  * @ClassName ApiController
@@ -35,7 +18,7 @@ import java.awt.*;
 @io.swagger.annotations.Api(tags = "接口管理")
 public class ApiController {
 
-	@Autowired
+	/*@Autowired
 	private IApiService apiService;
 
 	@Autowired
@@ -149,6 +132,6 @@ public class ApiController {
 
 	private Boolean judgeParam(Api api, Integer moduleId, Integer projectId) {
 		return (api.getProjectId().equals(projectId) && api.getModuleId().equals(moduleId));
-	}
+	}*/
 
 }

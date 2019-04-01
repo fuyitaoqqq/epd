@@ -22,7 +22,7 @@
     </sql>
 
 
-    <insert id="addModule" parameterType="module">
+    <insert id="addModule" parameterType="module" useGeneratedKeys="true" keyProperty="id">
       INSERT INTO epd.module
         (<include refid="moduleAllColumnsExceptId" />)
       VALUES

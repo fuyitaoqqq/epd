@@ -26,3 +26,6 @@ api:
 
 2019/4/1
 1. 查看项目详情，moduleList中新增uri字段.
+2. /projects返回自己创建的项目和公开项目（open=1），返回数据中有创建人信息
+
+moduleService update method

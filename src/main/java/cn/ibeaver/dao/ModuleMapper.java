@@ -4,6 +4,7 @@
 package cn.ibeaver.dao;
 
 import cn.ibeaver.pojo.Module;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
@@ -17,16 +18,5 @@ import java.util.List;
  * @Version 1.0
  **/
 @Component
-public interface ModuleMapper {
-
-	int addModule(Module module);
-
-	int deleteModuleById(@Param("id") Integer id, @Param("projectId") Integer projectId);
-
-	int updateModule(Module module);
-
-	Module getModuleByIdAndProjectId(@Param("id") Integer id, @Param("projectId") Integer projectId);
-
-	List<Module> getModulesByProjectId(Integer projectId);
-
+public interface ModuleMapper extends BaseMapper<Module> {
 }

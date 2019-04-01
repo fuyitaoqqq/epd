@@ -6,9 +6,11 @@ package cn.ibeaver.controller;
 import cn.ibeaver.dto.*;
 import cn.ibeaver.pojo.Project;
 import cn.ibeaver.pojo.ProjectMap;
-import cn.ibeaver.service.IModuleService;
+import cn.ibeaver.pojo.SysUser;
 import cn.ibeaver.service.ProjectMapService;
 import cn.ibeaver.service.ProjectService;
+import cn.ibeaver.service.SysUserService;
+import cn.ibeaver.utils.CommonUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -20,6 +22,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -43,12 +46,15 @@ public class ProjectController {
 	private ProjectMapService projectMapService;
 
 	@Autowired
-	private IModuleService moduleService;
+	private SysUserService sysUserService;
 
 	@ApiOperation(value = "获取项目列表", httpMethod = "GET")
 	@RequestMapping(value = "/projects", method = RequestMethod.GET)
-	public ResultDto getIndex() {
-		List<Project> projectList = projectService.getProjects();
+	public ResultDto getIndex(Principal principal) {
+
+		SysUser user = CommonUtil.getUserByPrincipal(principal);
+
+		List<Project> projectList = projectService.getProjects(user.getId());
 
 		if (projectList.size() == 0) {
 			return ResultDto.fail(ResultContants.DATA_BLANK.getCode(), ResultContants.DATA_BLANK.getMsg());
@@ -117,12 +123,19 @@ public class ProjectController {
 			@ApiImplicitParam(name = "requestFail", value = "全局参数：失败返回参数", required = false, dataType = "string", paramType = "query")
 	})
 	@RequestMapping(value = "/project", method = RequestMethod.POST)
-	public ResultDto addProject(@ApiIgnore @RequestBody Project project) {
-		project.setOwner(0);
+	public ResultDto addProject(@ApiIgnore @RequestBody Project project, Principal principal) {
+		SysUser user = sysUserService.getUserByLoginName(principal.getName());
+		project.setOwner(user.getId());
+
 		projectService.addProject(project);
+
 		Project projectById = projectService.getProjectById(project.getId());
 
-		return ResultDto.success(HttpStatus.CREATED.value(), HttpStatus.CREATED.getReasonPhrase(), project);
+		ProjectDto projectDto = new ProjectDto();
+		BeanCopier beanCopier = BeanCopier.create(Project.class, ProjectDto.class, false);
+		beanCopier.copy(projectById, projectDto, null);
+
+		return ResultDto.success(ResultContants.SUCCESS.getCode(), ResultContants.SUCCESS.getMsg(), projectDto);
 	}
 
 	@ApiOperation(value = "删除项目", httpMethod = "DELETE", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

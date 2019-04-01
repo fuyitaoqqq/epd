@@ -3,6 +3,9 @@
  */
 package cn.ibeaver.pojo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -17,31 +20,59 @@ import java.util.List;
  * @Version 1.0
  **/
 @Data
+@TableName("module")
 public class Module implements Serializable {
 
-	private static final long serialVersionUID = 404302089604762350L;
-	/* 主键ID */
-	private Integer id;
+    private static final long serialVersionUID = 404302089604762350L;
+    /**
+     * 主键ID
+     */
+    @TableId(type = IdType.AUTO)
+    private Integer id;
 
-	/* 模块名 */
-	private String name;
+    /**
+     * 模块名
+     */
+    private String name;
 
-	/* 模块uri */
-	private String uri;
+    /**
+     * 模块uri
+     */
+    private String uri;
 
-	/* 模块描述 */
-	private String description;
+    /**
+     * 模块描述
+     */
+    private String description;
 
-	/* 接口列表 */
-	private String apiList;
+    /**
+     * 创建人id
+     */
+    private Integer createBy;
 
-	/* 关联项目ID */
-	private Integer projectId;
+    /**
+     * 创建人姓名
+     */
+    private String createByName;
 
-	/* 创建时间 */
-	private Date createTime;
+    /**
+     * 修改人id
+     */
+    private Integer updateBy;
 
-	/* 修改时间 */
-	private Date updateTime;
+    /**
+     * 修改人姓名
+     */
+    private String updateByName;
+
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+
+    /**
+     * 修改时间
+     */
+    private Date updateTime;
 
 }

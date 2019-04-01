@@ -20,37 +20,62 @@ import java.util.Date;
 @Data
 public class Project implements Serializable {
 
-	private static final long serialVersionUID = -8871894551565447839L;
+    private static final long serialVersionUID = -8871894551565447839L;
 
-	/* id */
-	@TableId(type = IdType.AUTO)
-	private Integer id;
+    /**
+     * id
+     */
+    @TableId(type = IdType.AUTO)
+    private Integer id;
 
-	/* 项目名称 */
-	private String name;
+    /**
+     * 项目名称
+     */
+    private String name;
 
-	/* 唯一标识 */
-	private String shorthand;
+    /**
+     * 唯一标识
+     */
+    private String shorthand;
 
-	/* 项目描述 */
-	private String description;
+    /**
+     * 项目描述
+     */
+    private String description;
 
-	/* base url */
-	private String baseUrl;
+    /**
+     * base url
+     */
+    private String baseUrl;
 
-	/* 0：私有，1：公开 */
-	private Integer open = 0;
+    /**
+     * 0：私有，1：公开
+     */
+    private Integer open = 0;
 
-	/* 所有者 */
-	private Integer owner;
+    /**
+     * 所有者
+     */
+    private Integer owner;
 
-	/* 统一返回格式 */
-	private String returnFormat;
+    /**
+     * 项目所有者姓名
+     */
+    private String ownerName;
 
-	/* 创建时间 */
-	private Date createTime;
+    /**
+     * 统一返回格式
+     */
+    private String returnFormat;
 
-	/* 修改时间 */
-	private Date updateTime;
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+
+    /**
+     * 修改时间
+     */
+    private Date updateTime;
 
 }

@@ -7,7 +7,6 @@ import cn.ibeaver.dto.ResultContants;
 import cn.ibeaver.pojo.Api;
 import cn.ibeaver.pojo.Module;
 import cn.ibeaver.service.IApiService;
-import cn.ibeaver.service.IModuleService;
 import cn.ibeaver.utils.CommonUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +25,27 @@ import java.util.List;
  **/
 @Service("apiService")
 public class ApiServiceImpl implements IApiService {
+	@Override
+	public int addApi(Api api) {
+		return 0;
+	}
 
-	@Autowired
+	@Override
+	public int deleteApi(Integer id, Integer moduleId, Integer projectId) {
+		return 0;
+	}
+
+	@Override
+	public int updateApi(Api api) {
+		return 0;
+	}
+
+	@Override
+	public Api getApiById(Integer id, Integer moduleId, Integer projectId) {
+		return null;
+	}
+
+	/*@Autowired
 	private ApiMapper apiMapper;
 
 	@Autowired
@@ -42,7 +60,7 @@ public class ApiServiceImpl implements IApiService {
 
 		//apiMapper.insert(api);
 
-		/*Integer moduleId = api.getModuleId();
+		*//*Integer moduleId = api.getModuleId();
 		Integer projectId = api.getProjectId();
 
 		Module module = moduleService.getModuleByIdAndProjectId(moduleId, projectId);
@@ -60,7 +78,7 @@ public class ApiServiceImpl implements IApiService {
 			return ResultContants.SUCCESS.getCode();
 		} else {
 			return ResultContants.SYS_ERR.getCode();
-		}*/
+		}*//*
 return 0;
 	}
 
@@ -119,5 +137,5 @@ return 0;
 	@Override
 	public Api getApiById(Integer id, Integer moduleId, Integer projectId) {
 		return apiMapper.getApiById(id, moduleId, projectId);
-	}
+	}*/
 }

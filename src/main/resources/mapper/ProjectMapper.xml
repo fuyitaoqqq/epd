@@ -71,13 +71,6 @@
         FROM epd.project WHERE shorthand = #{shorthand}
     </select>
 
-    <select id="getProjects" resultMap="projectsList">
-        SELECT
-        <include refid="projectAllColumns" />
-        FROM epd.project
-        ORDER BY create_time DESC
-    </select>
-
     <select id="getProjectById" parameterType="int" resultType="project">
         SELECT
         <include refid="projectColumnsExpectId" />

@@ -4,6 +4,7 @@
 package cn.ibeaver.dao;
 
 import cn.ibeaver.pojo.Project;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +18,7 @@ import java.util.List;
  * @Version 1.0
  **/
 @Component
-public interface ProjectMapper {
+public interface ProjectMapper extends BaseMapper<Project> {
 
 	int addProject(Project project);
 
@@ -28,6 +29,4 @@ public interface ProjectMapper {
 	Project getProjectByShorthand(String shorthand);
 
 	Project getProjectById(Integer id);
-
-	List<Project> getProjects();
 }

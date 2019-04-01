@@ -47,6 +47,11 @@ public class ProjectDto implements Serializable {
     private Integer owner;
 
     /**
+     * 项目所有者姓名
+     */
+    private String ownerName;
+
+    /**
      * 统一返回格式
      */
     private String returnFormat;

@@ -6,19 +6,22 @@ package cn.ibeaver.controller;
 import cn.ibeaver.dto.ResultContants;
 import cn.ibeaver.dto.ResultDto;
 import cn.ibeaver.pojo.Module;
-import cn.ibeaver.service.IModuleService;
+import cn.ibeaver.pojo.Project;
+import cn.ibeaver.pojo.SysUser;
+import cn.ibeaver.service.ModuleService;
 import cn.ibeaver.service.ProjectService;
+import cn.ibeaver.utils.CommonUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
+
+import java.security.Principal;
 
 /**
  * @ClassName ModuleController
@@ -28,12 +31,12 @@ import springfox.documentation.annotations.ApiIgnore;
  * @Version 1.0
  **/
 @RestController
-@RequestMapping("/project/{projectId}")
+@RequestMapping("/project/{shorthand}")
 @Api(tags = "模块管理")
 public class ModuleController {
 
 	@Autowired
-	private IModuleService moduleService;
+	private ModuleService moduleService;
 
 	@Autowired
 	private ProjectService projectService;
@@ -49,49 +52,50 @@ public class ModuleController {
 	})
 	@RequestMapping(value = "/module", method = RequestMethod.POST,
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResultDto addModule(@ApiIgnore Module module, @PathVariable("projectId") Integer projectId) {
-		Boolean exist = ifProjectExist(projectId);
-		if (exist && module.getProjectId().equals(projectId)) {
-			int i = moduleService.addModule(module);
-			if (i == 1) {
-				return ResultDto.success();
-			}
+	public ResultDto addModule(@ApiIgnore @RequestBody Module module,
+							   @PathVariable("shorthand") String shorthand,
+							   Principal principal) {
+
+		SysUser user = CommonUtil.getUserByPrincipal(principal);
+
+		Project project = projectService.getProjectByShorthand(shorthand);
+		if (project == null) {
+			return ResultDto.fail(ResultContants.DATA_BLANK.getCode(), ResultContants.DATA_BLANK.getMsg());
 		}
-		return ResultDto.fail(ResultContants.PARAM_ERR.getCode(), ResultContants.PARAM_ERR.getMsg());
+
+		moduleService.addModule(module, user, project.getId());
+
+		return ResultDto.success(ResultContants.SUCCESS.getCode(), ResultContants.SUCCESS.getMsg(), module);
 	}
 
 	@ApiOperation(value = "删除模块", httpMethod = "DELETE",
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@RequestMapping(value = "/module/{moduleId}", method = RequestMethod.DELETE,
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResultDto deleteModule(@PathVariable("projectId") Integer projectId,
+	public ResultDto deleteModule(@PathVariable("shorthand") String shorthand,
 								  @PathVariable("moduleId") Integer moduleId) {
 
-		Boolean exist = ifProjectExist(projectId);
-		if (exist) {
-			int i = moduleService.deleteModuleById(moduleId, projectId);
-			if (i == 1) {
-				return ResultDto.success();
-			}
+		Project project = projectService.getProjectByShorthand(shorthand);
+		if (project == null) {
+			return ResultDto.fail(ResultContants.DATA_BLANK.getCode(), ResultContants.DATA_BLANK.getMsg());
 		}
-		return ResultDto.fail(ResultContants.PARAM_ERR.getCode(), ResultContants.PARAM_ERR.getMsg());
 
+		moduleService.deleteModule(moduleId, project.getId());
+		return ResultDto.success();
 	}
 
 	@ApiOperation(value = "获取模块", httpMethod = "GET", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@RequestMapping(value = "/module/{moduleId}", method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResultDto getModuleById(@PathVariable("projectId") Integer projectId,
+	public ResultDto getModuleById(@PathVariable("shorthand") String shorthand,
 								   @PathVariable("moduleId") Integer moduleId) {
-		Boolean exist = ifProjectExist(projectId);
-		if (exist) {
-			Module module = moduleService.getModuleByIdAndProjectId(moduleId, projectId);
-			if (module != null) {
-				return ResultDto.success(module);
-			}
+		Project project = projectService.getProjectByShorthand(shorthand);
+		if (project == null) {
+			return ResultDto.fail(ResultContants.DATA_BLANK.getCode(), ResultContants.DATA_BLANK.getMsg());
 		}
-		return ResultDto.fail(ResultContants.PARAM_ERR.getCode(), ResultContants.PARAM_ERR.getMsg());
 
+		Module module = moduleService.getModuleById(moduleId);
+		return ResultDto.success(ResultContants.SUCCESS.getCode(), ResultContants.SUCCESS.getMsg(), module);
 	}
 
 	@ApiOperation(value = "更新模块", notes = "更新模块", httpMethod = "PUT",
@@ -105,26 +109,27 @@ public class ModuleController {
 	})
 	@RequestMapping(value = "/module/{moduleId}", method = RequestMethod.PUT,
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResultDto updateModule(@ApiIgnore Module module,
-								  @PathVariable("projectId") Integer projectId,
-								  @PathVariable("moduleId") Integer moduleId) {
-		Boolean exist = ifProjectExist(projectId);
-		if (exist) {
-			module.setId(moduleId);
-			int i = moduleService.updateModule(module);
-			if (i == 1) {
-				return ResultDto.success();
-			}
+	public ResultDto updateModule(@ApiIgnore @RequestBody Module module,
+								  @PathVariable("shorthand") String shorthand,
+								  Principal principal) {
+
+		SysUser user = CommonUtil.getUserByPrincipal(principal);
+
+		Project project = projectService.getProjectByShorthand(shorthand);
+		if (project == null) {
+			return ResultDto.fail(ResultContants.DATA_BLANK.getCode(), ResultContants.DATA_BLANK.getMsg());
 		}
-		return ResultDto.fail(ResultContants.PARAM_ERR.getCode(), ResultContants.PARAM_ERR.getMsg());
+
+		moduleService.updateModule(module, user);
+		return ResultDto.success(ResultContants.SUCCESS.getCode(), ResultContants.SUCCESS.getMsg(), module);
 	}
 
-	private Boolean ifProjectExist(Integer projectId) {
+	/*private Boolean ifProjectExist(Integer projectId) {
 //		Project project = projectService.getProjectById(projectId);
 //		if (project != null) {
 //			return true;
 //		}
 		return false;
-	}
+	}*/
 
 }

@@ -52,4 +52,25 @@ public class ProjectMapService {
         return projectMapMapper.selectList(wrapper);
     }
 
+    public int insert(ProjectMap projectMap) {
+        return projectMapMapper.insert(projectMap);
+    }
+
+    public int delete(String operation, Integer moduleOrApi, Integer pid) {
+        QueryWrapper<ProjectMap> wrapper = new QueryWrapper<>();
+        switch (operation) {
+            case "module":
+                operation = "module_id";
+                break;
+            case "api":
+                operation = "api_id";
+                break;
+            default:
+                operation = "module_id";
+        }
+        wrapper.eq("pid", pid).eq(operation, moduleOrApi);
+
+        return projectMapMapper.delete(wrapper);
+    }
+
 }

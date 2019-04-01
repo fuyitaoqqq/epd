@@ -6,6 +6,7 @@ package cn.ibeaver.service;
 import cn.ibeaver.dao.ProjectMapper;
 import cn.ibeaver.pojo.Project;
 import cn.ibeaver.utils.CommonUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,8 +46,10 @@ public class ProjectService {
 		return projectMapper.getProjectByShorthand(shorthand);
 	}
 
-	public List<Project> getProjects() {
-		return projectMapper.getProjects();
+	public List<Project> getProjects(Integer owner) {
+		QueryWrapper<Project> wrapper = new QueryWrapper<>();
+		wrapper.eq("owner", owner).or().eq("open", 1);
+		return projectMapper.selectList(wrapper);
 	}
 
 	public Project getProjectById(Integer id) {
