@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * @author: fuyitao
@@ -12,6 +13,7 @@ import lombok.Data;
 
 @Data
 @TableName("project_map")
+@Accessors(chain = true)
 public class ProjectMap {
 
     @TableId(type = IdType.AUTO)

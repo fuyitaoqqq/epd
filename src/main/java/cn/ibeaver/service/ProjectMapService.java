@@ -120,4 +120,10 @@ public class ProjectMapService {
 
     }
 
+    public ProjectMap getByModuleId(Integer moduleId) {
+        QueryWrapper<ProjectMap> wrapper = new QueryWrapper<>();
+        wrapper.eq("module_id", moduleId);
+        return projectMapMapper.selectOne(wrapper);
+    }
+
 }

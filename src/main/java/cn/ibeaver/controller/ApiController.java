@@ -3,8 +3,24 @@
  */
 package cn.ibeaver.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import cn.ibeaver.dto.ResultContants;
+import cn.ibeaver.dto.ResultDto;
+import cn.ibeaver.pojo.Api;
+import cn.ibeaver.pojo.Project;
+import cn.ibeaver.pojo.SysUser;
+import cn.ibeaver.service.ApiService;
+import cn.ibeaver.service.ModuleService;
+import cn.ibeaver.service.ProjectService;
+import cn.ibeaver.utils.CommonUtil;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
+
+import java.security.Principal;
 
 /**
  * @ClassName ApiController
@@ -14,15 +30,18 @@ import org.springframework.web.bind.annotation.RestController;
  * @Version 1.0
  **/
 @RestController
-@RequestMapping("/project/{projectId}/module/{moduleId}")
+@RequestMapping("/project/{shorthand}/module/{moduleId}")
 @io.swagger.annotations.Api(tags = "接口管理")
 public class ApiController {
 
-	/*@Autowired
-	private IApiService apiService;
+	@Autowired
+	private ApiService apiService;
 
 	@Autowired
-	private IModuleService moduleService;
+	private ModuleService moduleService;
+
+	@Autowired
+	private ProjectService projectService;
 
 	@ApiOperation(value = "添加接口详情", notes = "添加接口，接口详情", httpMethod = "POST",
 		produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -41,25 +60,22 @@ public class ApiController {
 	})
 	@RequestMapping(value = "/api", method = RequestMethod.POST,
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResultDto addApi(@ApiIgnore Api api,
-							@PathVariable("moduleId") Integer moduleId,
-							@PathVariable("projectId") Integer projectId) {
-		Boolean judgeParam = judgeParam(api, moduleId, projectId);
-		Boolean moduleExist = ifModuleExist(moduleId, projectId);
-		if (judgeParam && moduleExist) {
-			int i = apiService.addApi(api);
-			if (i == ResultContants.SUCCESS.getCode()) {
-				return ResultDto.success();
-			} else {
-				return ResultDto.fail(ResultContants.SYS_ERR.getCode(), ResultContants.SYS_ERR.getMsg());
-			}
-		} else {
-			return ResultDto.fail(ResultContants.PARAM_ERR.getCode(), ResultContants.PARAM_ERR.getMsg());
-		}
+	public ResultDto addApi(@ApiIgnore @RequestBody Api api,
+                            @PathVariable("moduleId") Integer moduleId,
+                            @PathVariable("shorthand") String shorthand,
+                            Principal principal) {
+
+        SysUser user = CommonUtil.getUserByPrincipal(principal);
+
+		Project project = projectService.getProjectByShorthand(shorthand);
+
+		Api newApi = apiService.insertApi(api, project.getId(), moduleId, user);
+
+		return ResultDto.success(ResultContants.SUCCESS.getCode(), ResultContants.SUCCESS.getMsg(), newApi);
 
 	}
 
-	@ApiOperation(value = "删除api接口详情", notes = "删除api接口详情", httpMethod = "DELETE",
+	/*@ApiOperation(value = "删除api接口详情", notes = "删除api接口详情", httpMethod = "DELETE",
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@RequestMapping(value = "/api/{apiId}", method = RequestMethod.DELETE,
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

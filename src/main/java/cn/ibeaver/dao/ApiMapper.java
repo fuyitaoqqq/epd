@@ -4,8 +4,7 @@
 package cn.ibeaver.dao;
 
 import cn.ibeaver.pojo.Api;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Component;
 
 /**
@@ -16,14 +15,5 @@ import org.springframework.stereotype.Component;
  * @Version 1.0
  **/
 @Component
-public interface ApiMapper{
-
-	int addApi(Api api);
-
-	int deleteApi(@Param("id") Integer id, @Param("moduleId") Integer moduleId, @Param("projectId") Integer projectId);
-
-	int updateApi(Api api);
-
-	Api getApiById(@Param("id") Integer id, @Param("moduleId") Integer moduleId, @Param("projectId") Integer projectId);
-
+public interface ApiMapper extends BaseMapper<Api> {
 }
