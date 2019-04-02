@@ -3,6 +3,7 @@
  */
 package cn.ibeaver.controller;
 
+import cn.ibeaver.dto.ModuleDto;
 import cn.ibeaver.dto.ResultContants;
 import cn.ibeaver.dto.ResultDto;
 import cn.ibeaver.pojo.Module;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.security.Principal;
+import java.util.ArrayList;
 
 /**
  * @ClassName ModuleController
@@ -61,7 +63,11 @@ public class ModuleController {
 
 		if (project != null) {
 			moduleService.addModule(module, user, project.getId());
-			return ResultDto.success(ResultContants.SUCCESS.getCode(), ResultContants.SUCCESS.getMsg(), module);
+
+			ModuleDto moduleDto = new ModuleDto();
+			moduleDto.setModuleId(module.getId()).setModuleName(module.getName()).setUri(module.getUri()).setApiList(new ArrayList<>());
+
+			return ResultDto.success(ResultContants.SUCCESS.getCode(), ResultContants.SUCCESS.getMsg(), moduleDto);
 		}
 
 		return ResultDto.fail(ResultContants.PARAM_ERR.getCode(), ResultContants.PARAM_ERR.getMsg());
@@ -83,7 +89,7 @@ public class ModuleController {
 		return ResultDto.fail(ResultContants.PARAM_ERR.getCode(), ResultContants.PARAM_ERR.getMsg());
 	}
 
-	@ApiOperation(value = "获取模块", httpMethod = "GET", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	/*@ApiOperation(value = "获取模块", httpMethod = "GET", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@RequestMapping(value = "/module/{moduleId}", method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResultDto getModuleById(@PathVariable("shorthand") String shorthand,
@@ -91,15 +97,18 @@ public class ModuleController {
 		Project project = ifProjectExist(shorthand);
 		if (project != null) {
 			Module module = moduleService.getModuleById(moduleId);
+
 			if (module != null) {
-				return ResultDto.success(ResultContants.SUCCESS.getCode(), ResultContants.SUCCESS.getMsg(), module);
+				ModuleDto moduleDto = new ModuleDto();
+				moduleDto.setModuleId(module.getId()).setModuleName(module.getName()).setUri(module.getUri()).setApiList(new ArrayList<>());
+				return ResultDto.success(ResultContants.SUCCESS.getCode(), ResultContants.SUCCESS.getMsg(), moduleDto);
 			} else {
 				return ResultDto.fail(ResultContants.DATA_BLANK.getCode(), ResultContants.DATA_BLANK.getMsg());
 			}
 		}
 
 		return ResultDto.fail(ResultContants.PARAM_ERR.getCode(), ResultContants.PARAM_ERR.getMsg());
-	}
+	}*/
 
 	@ApiOperation(value = "更新模块", notes = "更新模块", httpMethod = "PUT",
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -124,7 +133,9 @@ public class ModuleController {
 			module.setId(moduleId);
 			moduleService.updateModule(module, user, project.getId());
 			Module moduleById = moduleService.getModuleById(moduleId);
-			return ResultDto.success(ResultContants.SUCCESS.getCode(), ResultContants.SUCCESS.getMsg(), moduleById);
+			ModuleDto moduleDto = new ModuleDto();
+			moduleDto.setModuleId(moduleById.getId()).setModuleName(moduleById.getName()).setUri(moduleById.getUri()).setApiList(new ArrayList<>());
+			return ResultDto.success(ResultContants.SUCCESS.getCode(), ResultContants.SUCCESS.getMsg(), moduleDto);
 		}
 
 		return ResultDto.fail(ResultContants.PARAM_ERR.getCode(), ResultContants.PARAM_ERR.getMsg());

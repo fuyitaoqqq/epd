@@ -75,23 +75,25 @@ public class ApiController {
 
 	}
 
-	/*@ApiOperation(value = "删除api接口详情", notes = "删除api接口详情", httpMethod = "DELETE",
+	@ApiOperation(value = "删除api接口详情", notes = "删除api接口详情", httpMethod = "DELETE",
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@RequestMapping(value = "/api/{apiId}", method = RequestMethod.DELETE,
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResultDto deleteApi(@PathVariable("apiId") Integer apiId,
 							   @PathVariable("moduleId") Integer moduleId,
-							   @PathVariable("projectId") Integer projectId) {
-		int i = apiService.deleteApi(apiId, moduleId, projectId);
-		if (i == ResultContants.SUCCESS.getCode()) {
+							   @PathVariable("shorthand") String shorthand) {
+
+		Project project = projectService.getProjectByShorthand(shorthand);
+
+		int i = apiService.deleteApi(project.getId(), moduleId, apiId);
+		if (i == 1) {
 			return ResultDto.success();
-		} else if (i == ResultContants.SYS_ERR.getCode()) {
-			return ResultDto.fail(ResultContants.SYS_ERR.getCode(), ResultContants.SYS_ERR.getMsg());
 		}
-		return ResultDto.fail(ResultContants.PARAM_ERR.getCode(), ResultContants.PARAM_ERR.getMsg());
+		return ResultDto.fail(ResultContants.SYS_ERR.getCode(), ResultContants.SYS_ERR.getMsg());
+
 	}
 
-	@ApiOperation(value = "更新接口详情", notes = "更新接口详情", httpMethod = "PUT",
+	/*@ApiOperation(value = "更新接口详情", notes = "更新接口详情", httpMethod = "PUT",
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "uri", value = "api接口地址", required = true, dataType = "string", paramType = "query"),

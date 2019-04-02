@@ -49,12 +49,9 @@ public class ModuleService {
 		projectMap.setPid(byProjectId.getId());
 		projectMap.setProjectId(projectId);
 
-		int j = projectMapService.insert(projectMap);
+		projectMapService.insert(projectMap);
 
-		if (i ==0 && j ==0) {
-			return ResultContants.SYS_ERR.getCode();
-		}
-		return ResultContants.SUCCESS.getCode();
+		return i;
 	}
 
 	@Transactional

@@ -4,7 +4,6 @@ import cn.ibeaver.dao.ApiMapper;
 import cn.ibeaver.pojo.Api;
 import cn.ibeaver.pojo.ProjectMap;
 import cn.ibeaver.pojo.SysUser;
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,6 +39,14 @@ public class ApiService extends ServiceImpl<ApiMapper, Api> {
         projectMapService.insert(projectMap);
 
         return api;
+    }
+
+    public int deleteApi(Integer projectId, Integer moduleId, Integer apiId) {
+
+        projectMapService.deleteApiByModuleId(projectId, moduleId, apiId);
+
+        return apiMapper.deleteById(apiId);
+
     }
 
 

@@ -46,11 +46,18 @@ public class ProjectMapService {
         return projectMapMapper.selectList(wrapper);
     }
 
-    public List<ProjectMap> getApiByModuleId(Integer moduleId) {
+    public int deleteApiByModuleId(Integer projectId, Integer moduleId, Integer apiId) {
+
+        ProjectMap byProjectId = getByProjectId(projectId);
+
+        QueryWrapper<ProjectMap> getModule = new QueryWrapper<>();
+        getModule.eq("module_id", moduleId).eq("pid", byProjectId.getId());
+        ProjectMap byModule = projectMapMapper.selectOne(getModule);
+
         QueryWrapper<ProjectMap> wrapper = new QueryWrapper<>();
-        wrapper.eq("module_id", moduleId);
-        wrapper.select("api_id", "api_name");
-        return projectMapMapper.selectList(wrapper);
+        wrapper.eq("api_id", apiId).eq("pid", byModule.getId());
+
+        return projectMapMapper.delete(wrapper);
     }
 
     public int insert(ProjectMap projectMap) {
