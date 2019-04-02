@@ -108,7 +108,7 @@ public class ProjectController {
 
 			projectDto.setModuleList(moduleList);
 
-			return ResultDto.success(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), projectDto);
+			return ResultDto.success(ResultContants.SUCCESS.getCode(), ResultContants.SUCCESS.getMsg(), projectDto);
 		}
 	}
 
@@ -141,7 +141,12 @@ public class ProjectController {
 	@RequestMapping(value = "/project/{shorthand}", method = RequestMethod.DELETE)
 	public ResultDto deleteProject(@PathVariable("shorthand") String shorthand) {
 		int i = projectService.deleteProjectByShorthand(shorthand);
-		return ifSuccess(i);
+
+		if (i == 0) {
+			return ResultDto.success();
+		} else {
+			return ResultDto.fail(ResultContants.SYS_ERR.getCode(), ResultContants.SYS_ERR.getMsg());
+		}
 	}
 
 	@ApiOperation(value = "更新项目信息", httpMethod = "PUT", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

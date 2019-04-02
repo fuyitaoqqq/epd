@@ -47,6 +47,7 @@ public class ModuleService {
 		ProjectMap byProjectId = projectMapService.getByProjectId(projectId);
 
 		projectMap.setPid(byProjectId.getId());
+		projectMap.setProjectId(projectId);
 
 		int j = projectMapService.insert(projectMap);
 
@@ -59,7 +60,9 @@ public class ModuleService {
 	@Transactional
 	public int deleteModule(Integer moduleId, Integer projectId) {
 		int i = moduleMapper.deleteById(moduleId);
-		int j = projectMapService.delete("module", moduleId, projectId);
+		ProjectMap byProjectId = projectMapService.getByProjectId(projectId);
+
+		int j = projectMapService.delete("module", moduleId, byProjectId.getId());
 		if (i ==0 && j ==0) {
 			return ResultContants.SYS_ERR.getCode();
 		}

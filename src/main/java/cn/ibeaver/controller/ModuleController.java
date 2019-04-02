@@ -91,7 +91,11 @@ public class ModuleController {
 		Project project = ifProjectExist(shorthand);
 		if (project != null) {
 			Module module = moduleService.getModuleById(moduleId);
-			return ResultDto.success(ResultContants.SUCCESS.getCode(), ResultContants.SUCCESS.getMsg(), module);
+			if (module != null) {
+				return ResultDto.success(ResultContants.SUCCESS.getCode(), ResultContants.SUCCESS.getMsg(), module);
+			} else {
+				return ResultDto.fail(ResultContants.DATA_BLANK.getCode(), ResultContants.DATA_BLANK.getMsg());
+			}
 		}
 
 		return ResultDto.fail(ResultContants.PARAM_ERR.getCode(), ResultContants.PARAM_ERR.getMsg());

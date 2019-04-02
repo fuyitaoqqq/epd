@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -58,17 +59,18 @@ public class ProjectMapService {
 
     public int delete(String operation, Integer moduleOrApi, Integer pid) {
         QueryWrapper<ProjectMap> wrapper = new QueryWrapper<>();
+        String column;
         switch (operation) {
             case "module":
-                operation = "module_id";
+                column = "module_id";
                 break;
             case "api":
-                operation = "api_id";
+                column = "api_id";
                 break;
             default:
-                operation = "module_id";
+                column = "module_id";
         }
-        wrapper.eq("pid", pid).eq(operation, moduleOrApi);
+        wrapper.eq("pid", pid).eq(column, moduleOrApi);
 
         return projectMapMapper.delete(wrapper);
     }
@@ -85,8 +87,37 @@ public class ProjectMapService {
 
     public ProjectMap getByProjectId(Integer projectId) {
         QueryWrapper<ProjectMap> wrapper = new QueryWrapper<>();
-        wrapper.eq("project_id", projectId);
+        wrapper.eq("project_id", projectId).isNull("pid");
         return projectMapMapper.selectOne(wrapper);
+    }
+
+    public void deleteWholdProject(Integer projectId) {
+
+        List<Integer> ids = new ArrayList<>();
+
+        ProjectMap byProjectId = getByProjectId(projectId);
+
+        Integer pid = byProjectId.getId();
+
+        ids.add(pid);
+
+        QueryWrapper<ProjectMap> moduleWrapper = new QueryWrapper<>();
+        moduleWrapper.select("id").eq("pid", pid);
+        List<ProjectMap> moduleMapIds = projectMapMapper.selectList(moduleWrapper);
+
+        QueryWrapper<ProjectMap> apiWrapper = new QueryWrapper<>();
+        for (ProjectMap moduleMapId : moduleMapIds) {
+            ids.add(moduleMapId.getId());
+            apiWrapper.select("id").eq("pid", moduleMapId.getId());
+            List<ProjectMap> apiMapIds = projectMapMapper.selectList(apiWrapper);
+            for (ProjectMap apiMapId : apiMapIds) {
+                ids.add(apiMapId.getId());
+            }
+
+        }
+
+        projectMapMapper.deleteBatchIds(ids);
+
     }
 
 }

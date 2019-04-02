@@ -62,17 +62,13 @@ public class ProjectService {
 
 		Project project = getProjectByShorthand(shorthand);
 
-		List<Module> moduleList = moduleService.getListByProjectId(project.getId());
-		if (moduleList.size() == 0) {
-			int i = projectMapper.deleteProjectByShorthand(shorthand);
-			if (i == 1) {
-				return ResultContants.SUCCESS.getCode();
-			} else {
-				return ResultContants.SYS_ERR.getCode();
-			}
-		}
+		projectMapService.deleteWholdProject(project.getId());
 
-		return ResultContants.DISABLE_OPERATION.getCode();
+		projectMapper.deleteProjectByShorthand(shorthand);
+
+		System.out.println("the whold project delete successfully");
+
+		return 0;
 	}
 
 	public int updateProject(Project project) {
