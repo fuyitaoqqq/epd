@@ -1,6 +1,7 @@
 package cn.ibeaver.service;
 
 import cn.ibeaver.dao.ProjectMapMapper;
+import cn.ibeaver.pojo.Project;
 import cn.ibeaver.pojo.ProjectMap;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,6 +86,17 @@ public class ProjectMapService {
     public ProjectMap getModuleByProjectIdAndModuleId(Integer moduleId, Integer projectId) {
         QueryWrapper<ProjectMap> wrapper = new QueryWrapper<>();
         wrapper.eq("module_id", moduleId).eq("pid", projectId);
+        return projectMapMapper.selectOne(wrapper);
+    }
+
+    public ProjectMap getApiByModuleIdAndApiId(Integer projectId, Integer moduleId, Integer apiId) {
+
+        ProjectMap byProjectId = getByProjectId(projectId);
+
+        ProjectMap module = getModuleByProjectIdAndModuleId(moduleId, byProjectId.getId());
+
+        QueryWrapper<ProjectMap> wrapper = new QueryWrapper<>();
+        wrapper.eq("api_id", apiId).eq("pid", module.getId());
         return projectMapMapper.selectOne(wrapper);
     }
 

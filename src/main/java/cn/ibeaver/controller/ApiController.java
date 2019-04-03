@@ -93,7 +93,7 @@ public class ApiController {
 
 	}
 
-	/*@ApiOperation(value = "更新接口详情", notes = "更新接口详情", httpMethod = "PUT",
+	@ApiOperation(value = "更新接口详情", notes = "更新接口详情", httpMethod = "PUT",
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "uri", value = "api接口地址", required = true, dataType = "string", paramType = "query"),
@@ -110,36 +110,43 @@ public class ApiController {
 	})
 	@RequestMapping(value = "/api/{apiId}", method = RequestMethod.PUT,
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResultDto updateApi(@ApiIgnore Api api,
+	public ResultDto updateApi(@ApiIgnore @RequestBody Api api,
 							   @PathVariable("apiId") Integer apiId,
 							   @PathVariable("moduleId") Integer moduleId,
-							   @PathVariable("projectId") Integer projectId) {
-		Boolean judgeParam = judgeParam(api, moduleId, projectId);
-		Api getOne = apiService.getApiById(apiId, moduleId, projectId);
-		if (judgeParam && getOne != null) {
-			api.setId(apiId);
-			int i = apiService.updateApi(api);
-			if (i == ResultContants.SUCCESS.getCode()) {
-				return ResultDto.success();
-			}
+							   @PathVariable("shorthand") String shorthand,
+							   Principal principal) {
+
+		SysUser user = CommonUtil.getUserByPrincipal(principal);
+
+		Project project = projectService.getProjectByShorthand(shorthand);
+
+		api.setId(apiId);
+		int i = apiService.updateApi(api, user);
+
+		Api byId = apiService.getById(api.getId());
+
+		if (i == ResultContants.SUCCESS.getCode()) {
+			return ResultDto.success(byId);
 		}
+
 		return ResultDto.fail(ResultContants.PARAM_ERR.getCode(), ResultContants.PARAM_ERR.getMsg());
 	}
+
 	@ApiOperation(value = "查询接口详情", notes = "查询接口详情", httpMethod = "GET",
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@RequestMapping(value = "/api/{apiId}", method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResultDto getApi(@PathVariable("apiId") Integer apiId,
 							@PathVariable("moduleId") Integer moduleId,
-							@PathVariable("projectId") Integer projectId) {
-		Api api = apiService.getApiById(apiId, moduleId, projectId);
+							@PathVariable("shorthand") String shorthand) {
+		Api api = apiService.getApiDetail(apiId);
 		if (api != null) {
 			return ResultDto.success(api);
 		}
 		return ResultDto.fail(ResultContants.DATA_BLANK.getCode(), ResultContants.DATA_BLANK.getMsg());
 	}
 
-	private Boolean ifModuleExist(Integer moduleId, Integer projectId) {
+	/*private Boolean ifModuleExist(Integer moduleId, Integer projectId) {
 		Module module = moduleService.getModuleByIdAndProjectId(moduleId, projectId);
 		if (module != null) {
 			return true;

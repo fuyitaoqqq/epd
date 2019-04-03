@@ -45,7 +45,7 @@ public enum ResultContants {
 
 	public static Integer getByCode(Integer code) {
 		for (ResultContants result: values()) {
-			if (result.getCode() == code) {
+			if (result.getCode().equals(code)) {
 				return result.getCode();
 			}
 		}

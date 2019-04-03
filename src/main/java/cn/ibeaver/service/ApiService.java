@@ -1,6 +1,7 @@
 package cn.ibeaver.service;
 
 import cn.ibeaver.dao.ApiMapper;
+import cn.ibeaver.dto.ResultContants;
 import cn.ibeaver.pojo.Api;
 import cn.ibeaver.pojo.ProjectMap;
 import cn.ibeaver.pojo.SysUser;
@@ -34,8 +35,8 @@ public class ApiService extends ServiceImpl<ApiMapper, Api> {
 
         ProjectMap byModuleId = projectMapService.getByModuleId(moduleId);
         ProjectMap projectMap = new ProjectMap();
-        projectMap.setName(api.getName()).setUri(api.getName()).setProjectId(projectId)
-                .setModuleId(moduleId).setApiId(api.getId()).setPid(byModuleId.getId());
+        projectMap.setName(api.getName()).setUri(api.getName())
+                .setApiId(api.getId()).setPid(byModuleId.getId());
         projectMapService.insert(projectMap);
 
         return api;
@@ -49,5 +50,28 @@ public class ApiService extends ServiceImpl<ApiMapper, Api> {
 
     }
 
+    public int updateApi(Api api, SysUser user) {
 
+        api.setUpdateBy(user.getId());
+        api.setUpdateByName(user.getLoginName());
+        api.setUpdateTime(new Date());
+        int j = apiMapper.updateById(api);
+
+        Api selectById = apiMapper.selectById(api.getId());
+
+        ProjectMap apiByModuleIdAndApiId = projectMapService.getApiByModuleIdAndApiId(selectById.getProjectId(), selectById.getModuleId(), selectById.getId());
+        apiByModuleIdAndApiId.setName(selectById.getName());
+        apiByModuleIdAndApiId.setUri(selectById.getUri());
+        int i = projectMapService.updateById(apiByModuleIdAndApiId);
+
+        if (i == 0 && j == 0) {
+            return ResultContants.SYS_ERR.getCode();
+        }
+        return ResultContants.SUCCESS.getCode();
+
+    }
+
+    public Api getApiDetail(Integer apiId) {
+        return apiMapper.selectById(apiId);
+    }
 }
