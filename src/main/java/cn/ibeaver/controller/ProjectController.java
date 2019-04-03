@@ -134,6 +134,8 @@ public class ProjectController {
 		BeanCopier beanCopier = BeanCopier.create(Project.class, ProjectDto.class, false);
 		beanCopier.copy(projectById, projectDto, null);
 
+		projectDto.setModuleList(new ArrayList<>());
+
 		return ResultDto.success(ResultContants.SUCCESS.getCode(), ResultContants.SUCCESS.getMsg(), projectDto);
 	}
 

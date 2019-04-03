@@ -73,7 +73,14 @@ public class ModuleService {
 		module.setUpdateByName(user.getLoginName());
 		int i = moduleMapper.updateById(module);
 
-		ProjectMap projectMap = projectMapService.getByProjectId(projectId);
+		ProjectMap byProjectId = projectMapService.getByProjectId(projectId);
+		ProjectMap projectMap = projectMapService.getModuleByProjectIdAndModuleId(module.getId(), byProjectId.getId());
+
+		projectMap.setName(module.getName()).setUri(module.getUri());
+
+		int j = projectMapService.updateById(projectMap);
+
+		/*ProjectMap projectMap = projectMapService.getByProjectId(projectId);
 		projectMap.setModuleId(module.getId());
 		projectMap.setName(module.getName());
 		projectMap.setPid(projectId);
@@ -83,7 +90,7 @@ public class ModuleService {
 		projectMap.setId(moduleByIds.getId());
 
 		int j = projectMapService.updateById(projectMap);
-
+*/
 		if (i == 0 && j==0) {
 			return ResultContants.SYS_ERR.getCode();
 		}
