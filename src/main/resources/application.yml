@@ -12,6 +12,7 @@ spring:
     password: 1qaz@WSX
     driver-class-name: com.mysql.cj.jdbc.Driver
 mybatis-plus:
+  #type-handlers-package: cn.animalcity.apidocument.typeHandler
   type-aliases-package: cn.animalcity.apidocument.pojo
   mapper-locations: classpath:mapper/*.xml
   configuration:

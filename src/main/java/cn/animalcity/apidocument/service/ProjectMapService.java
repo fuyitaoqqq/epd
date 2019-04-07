@@ -63,7 +63,7 @@ public class ProjectMapService {
      * @param apiId     api id
      * @return primary key of project map
      */
-    public int getPrimaryKeyByParam(Integer projectId, Integer moduleId, Integer apiId) {
+    private int getPrimaryKeyByParam(Integer projectId, Integer moduleId, Integer apiId) {
         QueryWrapper<ProjectMap> wrapper = new QueryWrapper<>();
         if (projectId != null) {
             wrapper.eq("project_id", projectId);
@@ -81,7 +81,7 @@ public class ProjectMapService {
      * @param instance project module api
      * @return nstance查询在project map中的主键id
      */
-    public int getPrimaryKeyByParent(AbstractProjectParent instance) {
+    private int getPrimaryKeyByParent(AbstractProjectParent instance) {
         QueryWrapper<ProjectMap> wrapper = new QueryWrapper<>();
 
         if (instance instanceof Project) {
@@ -127,7 +127,7 @@ public class ProjectMapService {
      * @param isMapPrimaryKey 判断moduleId是否是project_map表中的主键，还是module表中的主键
      * @return
      */
-    public int deleteModule(Integer moduleId, boolean isMapPrimaryKey) {
+    int deleteModule(Integer moduleId, boolean isMapPrimaryKey) {
         int modulePrimaryId;
         if (isMapPrimaryKey) {
             modulePrimaryId = moduleId;
@@ -146,7 +146,7 @@ public class ProjectMapService {
      * deleteById删除项目单条记录，deleteModule方法删除下属module所有记录
      * @param projectId
      */
-    public int deleteWholeProject(Integer projectId) {
+    int deleteWholeProject(Integer projectId) {
         int projectPrimaryId = getPrimaryKeyByParam(projectId, null, null);
 
         List<ProjectMap> moduleList = getListByPid(projectPrimaryId);
@@ -166,7 +166,7 @@ public class ProjectMapService {
      * @param column mapEnum = project需要传uri，mapEnum = module需要传moduleId，mapEnum = api需要传apiId
      * @return
      */
-    public int updateProjectMap(ProjectMap projectMap, ProjectMapEnum mapEnum, Object column) {
+    int updateProjectMap(ProjectMap projectMap, ProjectMapEnum mapEnum, Object column) {
         QueryWrapper<ProjectMap> wrapper = new QueryWrapper<>();
 
         switch (mapEnum) {
@@ -185,7 +185,13 @@ public class ProjectMapService {
         return projectMapMapper.update(projectMap, wrapper);
     }
 
-    public int deleteProjectMap(String column, Object value) {
+    /**
+     * 根据某个可定位字段删除project map信息，字段如id，project的uri，project_id，module_id，api_id
+     * @param column 可用于定位的字段
+     * @param value 字段值
+     * @return 删除成功返回1
+     */
+    int deleteProjectMap(String column, Object value) {
         QueryWrapper<ProjectMap> wrapper = new QueryWrapper<>();
         wrapper.eq(column, value);
         return projectMapMapper.delete(wrapper);

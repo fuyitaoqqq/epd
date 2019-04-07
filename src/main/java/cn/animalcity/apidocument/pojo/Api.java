@@ -4,6 +4,7 @@
 package cn.animalcity.apidocument.pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
@@ -23,7 +24,7 @@ import java.util.Date;
  * @Version 1.0
  **/
 @Data
-@TableName("api")
+@TableName(value = "api", resultMap = "apiMapperResultMap")
 @Accessors(chain = true)
 @Builder
 @NoArgsConstructor
@@ -35,8 +36,14 @@ public class Api extends AbstractProjectParent implements Serializable {
     /**
      * id
      */
-    @TableId(type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
+
+    /**
+     * 拼接给前台显示的uri
+     * baseUrl/uri/uri
+     */
+    private String showUri;
 
     /**
      * 接口描述
@@ -56,11 +63,13 @@ public class Api extends AbstractProjectParent implements Serializable {
     /**
      * 请求参数
      */
+    @TableField("request_param")
     private String requestParam;
 
     /**
      * 相应参数
      */
+    @TableField("response_param")
     private String responseParam;
 
     /**

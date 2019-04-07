@@ -27,6 +27,7 @@ CREATE TABLE `api` (
   `name` varchar(200) DEFAULT NULL,
   `description` varchar(200) DEFAULT NULL,
   `uri` varchar(200) NOT NULL,
+  `show_uri` varchar(200) DEFAULT NULL COMMENT '拼接给前台的完整uri',
   `content_type` varchar(200) NOT NULL,
   `method` varchar(200) NOT NULL,
   `request_param` blob,
@@ -41,8 +42,18 @@ CREATE TABLE `api` (
   `update_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `api_id_uindex` (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='接口详情';
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='接口详情';
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `api`
+--
+
+LOCK TABLES `api` WRITE;
+/*!40000 ALTER TABLE `api` DISABLE KEYS */;
+INSERT INTO `api` VALUES (1,'222','22','2222',NULL,'application/x-www-form-urlencoded','POST','[{\"name\":\"asdas\",\"cate\":\"String\",\"default\":\"ww\",\"describe\":\"qqq\",\"id\":\"1\",\"require\":\"on\",\"property\":[]}]','[{\"name\":\"asd\",\"cate\":\"String\",\"default\":\"asd\",\"describe\":\"sad\",\"id\":\"1\",\"require\":\"on\",\"property\":[]}]',1,1,2,'admin',NULL,NULL,'2019-04-07 22:13:10',NULL),(2,'login','登录使用','login',NULL,'application/x-www-form-urlencoded','POST','[{\"name\":\"username\",\"cate\":\"String\",\"default\":\"admin\",\"describe\":\"用户名\",\"id\":\"1\",\"require\":\"on\",\"property\":[]},{\"name\":\"password\",\"cate\":\"String\",\"default\":\"admin\",\"describe\":\"密码\",\"id\":\"2\",\"require\":\"on\",\"property\":[]}]','[{\"name\":\"code\",\"cate\":\"Number\",\"default\":\"0\",\"describe\":\"状态码\",\"id\":\"1\",\"require\":\"on\",\"property\":[]},{\"name\":\"data\",\"cate\":\"Object\",\"default\":\"\",\"describe\":\"数据\",\"id\":\"2\",\"require\":\"on\",\"property\":[]},{\"name\":\"message\",\"cate\":\"String\",\"default\":\"成功\",\"describe\":\"响应文本\",\"id\":\"3\",\"require\":\"on\",\"property\":[]}]',1,1,2,'admin',NULL,NULL,'2019-04-07 22:57:21',NULL),(3,'测试接口','测试使用','test',NULL,'application/json','PUT','[{\"name\":\"\",\"cate\":\"\",\"default\":\"\",\"describe\":\"\",\"id\":\"1\",\"require\":\"\",\"property\":[]}]','[{\"name\":\"code\",\"cate\":\"Number\",\"default\":\"\",\"describe\":\"测试\",\"id\":\"1\",\"require\":\"\",\"property\":[]}]',1,1,2,'admin',NULL,NULL,'2019-04-07 22:59:56',NULL),(4,'新测试','1','2',NULL,'multipart/form-data','GET','[{\"name\":\"\",\"cate\":\"\",\"default\":\"\",\"describe\":\"\",\"id\":\"1\",\"require\":\"\",\"property\":[]}]','[{\"name\":\"code\",\"cate\":\"String\",\"default\":\"1\",\"describe\":\"1\",\"id\":\"1\",\"require\":\"on\",\"property\":[]}]',1,1,2,'admin',NULL,NULL,'2019-04-07 23:06:21',NULL),(5,'test','description','uri','/test//uri','a','get','aa','bb',1,1,2,'admin',NULL,NULL,'2019-04-07 23:46:40',NULL),(6,'test','description','uri','/test//uri','a','get','aa','bb',1,1,2,'admin',NULL,NULL,'2019-04-07 23:48:03',NULL),(7,'test','description','uri','/test/uri','a','get','aa','bb',1,1,2,'admin',NULL,NULL,'2019-04-07 23:49:40',NULL);
+/*!40000 ALTER TABLE `api` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `module`
@@ -65,8 +76,18 @@ CREATE TABLE `module` (
   `update_time` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `module_id_uindex` (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='项目模块';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='项目模块';
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `module`
+--
+
+LOCK TABLES `module` WRITE;
+/*!40000 ALTER TABLE `module` DISABLE KEYS */;
+INSERT INTO `module` VALUES (1,'登录模块','',NULL,1,2,'admin',2,'admin','2019-04-07 21:48:10','2019-04-07 22:55:19');
+/*!40000 ALTER TABLE `module` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `project`
@@ -94,6 +115,16 @@ CREATE TABLE `project` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `project`
+--
+
+LOCK TABLES `project` WRITE;
+/*!40000 ALTER TABLE `project` DISABLE KEYS */;
+INSERT INTO `project` VALUES (1,'测试添加接口','52c75f0389554fe681eff8c5462af67d','测试使用','test',1,2,'admin',NULL,'2019-04-07 21:44:38',NULL);
+/*!40000 ALTER TABLE `project` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `project_map`
 --
 
@@ -110,8 +141,18 @@ CREATE TABLE `project_map` (
   `pid` int(11) DEFAULT NULL COMMENT '父级ID',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `project_map_id_uindex` (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='项目map';
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='项目map';
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `project_map`
+--
+
+LOCK TABLES `project_map` WRITE;
+/*!40000 ALTER TABLE `project_map` DISABLE KEYS */;
+INSERT INTO `project_map` VALUES (1,'测试添加接口','52c75f0389554fe681eff8c5462af67d',1,NULL,NULL,0),(2,'登录模块','',NULL,1,NULL,1),(3,'222','2222',NULL,NULL,1,2),(4,'login','login',NULL,NULL,2,2),(5,'测试接口','test',NULL,NULL,3,2),(6,'新测试','2',NULL,NULL,4,2),(7,'test','uri',NULL,NULL,5,2),(8,'test','uri',NULL,NULL,7,2);
+/*!40000 ALTER TABLE `project_map` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `sys_permission`
@@ -131,6 +172,15 @@ CREATE TABLE `sys_permission` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `sys_permission`
+--
+
+LOCK TABLES `sys_permission` WRITE;
+/*!40000 ALTER TABLE `sys_permission` DISABLE KEYS */;
+/*!40000 ALTER TABLE `sys_permission` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `sys_role`
 --
 
@@ -146,6 +196,15 @@ CREATE TABLE `sys_role` (
   UNIQUE KEY `sys_role_id_uindex` (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='角色表';
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sys_role`
+--
+
+LOCK TABLES `sys_role` WRITE;
+/*!40000 ALTER TABLE `sys_role` DISABLE KEYS */;
+/*!40000 ALTER TABLE `sys_role` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `sys_role_permission`
@@ -164,6 +223,15 @@ CREATE TABLE `sys_role_permission` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `sys_role_permission`
+--
+
+LOCK TABLES `sys_role_permission` WRITE;
+/*!40000 ALTER TABLE `sys_role_permission` DISABLE KEYS */;
+/*!40000 ALTER TABLE `sys_role_permission` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `sys_user`
 --
 
@@ -178,6 +246,16 @@ CREATE TABLE `sys_user` (
   UNIQUE KEY `sys_user_id_uindex` (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户表';
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sys_user`
+--
+
+LOCK TABLES `sys_user` WRITE;
+/*!40000 ALTER TABLE `sys_user` DISABLE KEYS */;
+INSERT INTO `sys_user` VALUES (2,'admin','$2a$10$uvfq7ZJbt8UoiIUCk3OkMe9Kv41P4IxyCo9VYM.qQk7kjgQcACiIa');
+/*!40000 ALTER TABLE `sys_user` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `sys_user_ext`
@@ -201,6 +279,15 @@ CREATE TABLE `sys_user_ext` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `sys_user_ext`
+--
+
+LOCK TABLES `sys_user_ext` WRITE;
+/*!40000 ALTER TABLE `sys_user_ext` DISABLE KEYS */;
+/*!40000 ALTER TABLE `sys_user_ext` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `sys_user_role`
 --
 
@@ -215,6 +302,15 @@ CREATE TABLE `sys_user_role` (
   UNIQUE KEY `sys_user_role_id_uindex` (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户角色对应表';
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sys_user_role`
+--
+
+LOCK TABLES `sys_user_role` WRITE;
+/*!40000 ALTER TABLE `sys_user_role` DISABLE KEYS */;
+/*!40000 ALTER TABLE `sys_user_role` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -225,4 +321,4 @@ CREATE TABLE `sys_user_role` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-04-06 22:36:38
+-- Dump completed on 2019-04-08  0:08:04

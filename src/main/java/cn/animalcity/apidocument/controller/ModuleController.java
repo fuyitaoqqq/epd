@@ -10,6 +10,7 @@ import cn.animalcity.apidocument.service.ModuleService;
 import cn.animalcity.apidocument.service.ProjectService;
 import cn.animalcity.apidocument.utils.CommonUtil;
 import cn.animalcity.apidocument.utils.ConvertUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +28,7 @@ public class ModuleController {
 
     private final ProjectService projectService;
 
+    @Autowired
     public ModuleController(ModuleService moduleService, ProjectService projectService){
         this.moduleService = moduleService;
         this.projectService = projectService;

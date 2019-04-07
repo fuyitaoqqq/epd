@@ -9,6 +9,7 @@ import cn.animalcity.apidocument.service.ApiService;
 import cn.animalcity.apidocument.service.ProjectService;
 import cn.animalcity.apidocument.utils.CommonUtil;
 import cn.animalcity.apidocument.utils.ConvertUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +28,7 @@ public class ApiController {
 
     private final ProjectService projectService;
 
+    @Autowired
     public ApiController(ApiService apiService, ProjectService projectService) {
         this.apiService = apiService;
         this.projectService = projectService;

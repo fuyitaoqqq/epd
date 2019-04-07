@@ -8,6 +8,7 @@ import cn.animalcity.apidocument.pojo.SysUser;
 import cn.animalcity.apidocument.projectenum.ProjectMapEnum;
 import cn.animalcity.apidocument.utils.CommonUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -25,6 +26,7 @@ public class ProjectService {
 
     private final ProjectMapService projectMapService;
 
+    @Autowired
     public ProjectService(ProjectMapper projectMapper, ProjectMapService projectMapService) {
         this.projectMapper = projectMapper;
         this.projectMapService = projectMapService;
@@ -103,5 +105,11 @@ public class ProjectService {
         }
 
         return getProjectByUri(uri);
+    }
+
+    public String getBaseUrl(Integer projectId) {
+        QueryWrapper<Project> wrapper = new QueryWrapper<>();
+        wrapper.select("base_url").eq("id", projectId);
+        return projectMapper.selectOne(wrapper).getBaseUrl();
     }
 }

@@ -31,6 +31,12 @@ public class ApiDto {
     private String uri;
 
     /**
+     * 拼接给前台显示的uri
+     * baseUrl/uri/uri
+     */
+    private String showUri;
+
+    /**
      * content-type
      */
     private String contentType;

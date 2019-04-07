@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.animalcity.apidocument.dao.ApiMapper">
+
+    <resultMap id="apiMapperResultMap" type="api">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="description" property="description" />
+        <result column="uri" property="uri" />
+        <result column="show_uri" property="showUri" />
+        <result column="content_type" property="contentType" />
+        <result column="method" property="method" />
+        <result column="request_param" property="requestParam" jdbcType="BLOB" typeHandler="cn.animalcity.apidocument.typeHandler.BlobTypeHandler" />
+        <result column="response_param" property="responseParam" jdbcType="BLOB" typeHandler="cn.animalcity.apidocument.typeHandler.BlobTypeHandler" />
+        <result column="project_id" property="projectId" />
+        <result column="module_id" property="moduleId" />
+        <result column="create_by" property="createBy" />
+        <result column="create_by_name" property="createByName" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_by_name" property="updateByName" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+</mapper>

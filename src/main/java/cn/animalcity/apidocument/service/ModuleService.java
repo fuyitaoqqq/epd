@@ -1,5 +1,6 @@
 package cn.animalcity.apidocument.service;
 
+import cn.animalcity.apidocument.dao.ApiMapper;
 import cn.animalcity.apidocument.dao.ModuleMapper;
 import cn.animalcity.apidocument.dto.ResultConstants;
 import cn.animalcity.apidocument.pojo.Api;
@@ -7,7 +8,9 @@ import cn.animalcity.apidocument.pojo.Module;
 import cn.animalcity.apidocument.pojo.ProjectMap;
 import cn.animalcity.apidocument.pojo.SysUser;
 import cn.animalcity.apidocument.projectenum.ProjectMapEnum;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Lists;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -25,12 +28,13 @@ public class ModuleService {
 
     private final ProjectMapService projectMapService;
 
-    private final ApiService apiService;
+    private final ApiMapper apiMapper;
 
-    public ModuleService(ModuleMapper moduleMapper, ProjectMapService projectMapService, ApiService apiService) {
+    @Autowired
+    public ModuleService(ModuleMapper moduleMapper, ProjectMapService projectMapService, ApiMapper apiMapper) {
         this.moduleMapper = moduleMapper;
         this.projectMapService = projectMapService;
-        this.apiService = apiService;
+        this.apiMapper = apiMapper;
     }
 
     public Module addModule(Module module, SysUser user) {
@@ -61,7 +65,7 @@ public class ModuleService {
         int i = projectMapService.deleteModule(moduleId, false);
 
         List<Integer> ids = Lists.newArrayList();
-        List<Api> apiList = apiService.getApiIdsByModuleId(moduleId);
+        List<Api> apiList = getApiIdsByModuleId(moduleId);
 
         apiList.forEach(item -> ids.add(item.getId()));
 
@@ -104,5 +108,17 @@ public class ModuleService {
         } else {
             return null;
         }
+    }
+
+    /**
+     * 临时解决moduleService和apiService循环依赖的问题，将apiService中的查询方法搬到这里
+     * @param moduleId
+     * @return
+     */
+    private List<Api> getApiIdsByModuleId(Integer moduleId) {
+        QueryWrapper<Api> wrapper = new QueryWrapper<>();
+        wrapper.select("id");
+        wrapper.eq("module_id", moduleId);
+        return apiMapper.selectList(wrapper);
     }
 }
