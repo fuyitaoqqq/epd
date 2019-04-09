@@ -113,7 +113,13 @@ public class ApiService {
             showUri.append("/").append(api.getUri());
         }
 
-        return showUri.toString();
+        String string = showUri.toString();
+
+        if (string.contains("//")) {
+            string = string.replace("//", "/");
+        }
+
+        return string;
     }
 
 }
